@@ -1,0 +1,22 @@
+{
+  "name": "pointme",
+  "authors": [
+    "hogueyy <chris_hogue@att.net>"
+  ],
+  "description": "Navigation for the last 100",
+  "main": "",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

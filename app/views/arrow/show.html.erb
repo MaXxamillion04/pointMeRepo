@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <div class='top-div'></div>
+        <div class='name-div'>
+            <div class='text-center'>
+                <b><h8>David Emelianov</h8></b>
+            </div>
+        </div>
+        
+        <div class='distance-div'>
+            <div class='text-center'>
+                <h9 id='distance'></h9>
+            </div>
+        </div>
+        
+        <div id='arrow-div' class='arrow-div text-center'>
+            <img id='arrow' src='/assets/UP_ARROW_half.png'>
+        </div>
+        
+        <div class='col-xs-6 footer-left-div text-center' onclick='exit("3119298bc948f180")'>
+            <div class='inner-footer'>
+                <img src='/assets/x_button.png'>
+            </div>
+        </div>
+        <div id='right-footer' class='col-xs-6 footer-right-div text-center' onclick='toMap()'>
+            <div class='inner-footer'>
+                <img id='right-footer-image' src='/assets/map_icon.png'>
+            </div>
+        </div>
+        <script>
+            init("3119298bc948f180");
+        </script>
+        
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzBEEO3bnKTLFRPqLui9agNR38QwtaRmU">
+        </script>
+    </body>
+</html>

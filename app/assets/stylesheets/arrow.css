@@ -1,0 +1,64 @@
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.top-div{
+    height: 8%;
+    width: 100%;
+    background-color: #50D2C2;
+}
+
+.name-div{
+    height: 10%;
+    width: 100%;
+    color: #FFFFFF;
+    background-color: #50D2C2;
+}
+
+.distance-div{
+    width: 100%;
+    height: 12%;
+    color: #FFFFFF;
+    background-color: #50D2C2;
+}
+
+.arrow-div{
+    height: 57%;
+    width: 100%;
+    background-color: #50D2C2;
+}
+
+.footer-left-div{
+    height: 13%;
+    width: 50%;
+    display:table;
+    background-color: #41AA9D;
+}
+
+.footer-right-div{
+    height: 13%;
+    width: 50%;
+    display:table;
+}
+
+.inner-footer{
+    display:table-cell; 
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.map{
+    height: 100%;
+    width: 100%;
+}
+
+h8{
+    font-size: 650%;
+    text-shadow: 5px 5px 5px #8c8c8c;
+}
+
+h9{
+    font-size: 500%;
+}
