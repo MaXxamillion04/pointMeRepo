@@ -1,2 +1,109 @@
-<h1>Arrow#index</h1>
-<p>Find me in app/views/arrow/index.html.erb</p>
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Nunito:400,700,300' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div id='dialog'>
+            <div class='dialog-div'><p><h9>Recieving arrows is awesome, but sending them is even better!</h9></p></div>
+            <div class='dialog-div'><p><h9>Download PointMe mobile to send arrows to your friends, and get more accurate location readings.</h9></p></div>
+            <div class='dialog-imgs text-center'><p><img class='ios' src='/assets/ios.png' height="100" width="337"> <img class='android' src='/assets/android.png' height="100" width="337"></p></div>
+        </div>
+        
+        <script>
+            navigator.geolocation.getCurrentPosition(updateLocal);
+            initIndex("<%= @reciever_mid %>", "<%= Rails.application.secrets.mobile_api_key %>", "<%= @new_requests.length %>", "<%= @currently_running.length %>");
+        </script>
+        
+        <div id='top-div' class='top-div'>
+            <div class='req-inner'>
+                <div class="text-left">
+                    <img src='/assets/bubbles.png' id="refresh" onclick='refresh()' class='col-xs-offset-1'>
+                </div>
+            </div>
+            <div class='req-inner'>
+                <div class="text-center">
+                    <h9>Archer</h9>
+                </div>
+            </div>
+            <div class='req-inner'>
+                <div class="dropdown">
+                    <img src='/assets/bubbles.png' class=" dropdown-toggle col-xs-offset-7" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                        <h9><li><a href="/">Home</a></li></h9>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id='new-req-title'></div>
+        
+        <div id='new-req'>
+            <% 
+                count = 0
+                @new_requests.each { |req| 
+                    %>
+                        <div id= '<%= count.to_s %>-outer'>
+                            <div id='<%= count.to_s %>' class='new-req'>
+                                <div class='req-inner req-name'>
+                                    <div id ='<%= count.to_s %>-inner'>
+                                        <div class="col-xs-offset-1"><h9><%= req["sender_name"] %></h9></div>
+                                    </div>
+                                </div>
+                                <div class='req-inner'>
+                                    <img id='<%= count.to_s %>-approve' src='/assets/approve_smaller.png' onclick='approve("<%= count.to_s %>", 
+                                                                                                            "<%= @reciever_mid %>", 
+                                                                                                            "<%= req["aid"] %>", 
+                                                                                                            "<%= req["sender_mid"] %>",
+                                                                                                            "<%= req["sender_name"] %>",
+                                                                                                            "<%= req["deathtime"] %>")'>
+        
+                                    <img id='<%= count.to_s %>-deny' class='col-xs-offset-1' src='/assets/deny_smaller.png' onclick='deny("<%= count.to_s %>", 
+                                                                                                                                "<%= req["aid"] %>")'>
+                                </div>
+                            </div>
+                        </div>
+                    <%
+                    count += 1
+                }
+            %>
+        </div>
+        
+        <div id='running-req-title' class='req-title'>
+            <div class='req-inner'>
+                <h10 class='col-xs-offset-1'>CURRENTLY RUNNING</h10>
+            </div>
+        </div>
+        
+        <div id='running-req'>
+            <% 
+                @currently_running.each { |req| 
+                    %>
+                        <div id='<%= count.to_s %>' class='running-req'>
+                            <div class= 'req-inner req-name' onclick='showArrow("<%= @reciever_mid %>", "<%= req["sender_name"] %>", "<%= req["sender_mid"] %>", "<%= req["deathtime"] %>")'>
+                                <div class='col-xs-offset-1'><h9><%= req["sender_name"] %></h9></div><br>
+                                    <div>
+                                        <h11>
+                                            <div id='<%= count.to_s %>-distance' class='col-xs-6'><img class='col-xs-offset-1' src='/assets/distance_icon.png'></div><div id='<%= count.to_s %>-hours'><img class='col-xs-offset-1' src='/assets/time_icon.png'> <%= req["hours_left"] %></div>
+                                        </h11>
+                                    </div>
+                            </div>
+                            <div class='req-inner' onclick='deleteArrow("<%= count.to_s %>","<%= req["aid"] %>")'>
+                                <img class='col-xs-offset-5' src='/assets/delete_smaller.png'>
+                            </div>
+                        </div>
+                        <input id='<%= count.to_s %>-deathtime' type='hidden' value='<%= req["deathtime"]%>'>
+                        <input id='<%= count.to_s %>-m' type='hidden' value='<% req["sender_mid"]%>' >
+                        <script>calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>");</script>
+                    <%
+                    count += 1
+    
+                }
+            %>
+        </div>
+        
+        <script>
+            window.onload = initializeDivs();
+        </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    </body>
+</html>

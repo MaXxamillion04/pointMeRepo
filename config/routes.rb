@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   
+  root 'welcome#index'
+  get 'welcome/index'
+
   resources :member
   resources :arrow
+  get '/arrows/:id' => 'arrow#index'
+  post '/arrow/showArrow' => 'arrow#show'
   
   # API routes
   
@@ -10,18 +15,20 @@ Rails.application.routes.draw do
     get 'user/getLocation/:id' => 'api_user#getLocation'
     put 'user/putLocation/:id' => 'api_user#putLocation'
     post 'user/auth' => 'api_user#authenticate'
+    get 'user/confirm/:id' => 'api_user#confirm'
     
     resources :arrow, controller: :api_arrow
     get 'arrows/:id' => 'api_arrow#index'
     get 'arrow/accept/:id' => 'api_arrow#accept'
     get 'arrow/deny/:id' => 'api_arrow#deny'
+    
+    resources :place, controller: :api_place
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'member#show'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
