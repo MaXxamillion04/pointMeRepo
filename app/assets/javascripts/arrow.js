@@ -46,7 +46,8 @@ function initIndex(id, s, num_new, num_running){
     }; */
      $('#dialog').dialog({
         autoOpen: false, position: { my: "bottom", at: "bottom"},
-        width: $(window).width(), height: $(window).height() * 0.55, draggable: false
+        width: $(window).width(), height: $(window).height() * 0.55, 
+        draggable: false, dialogClass: 'no-title'
     });
     $("#dialog").bind( "clickoutside", function(event){
         $(this).hide();
