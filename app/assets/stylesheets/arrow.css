@@ -2,7 +2,6 @@
 html, body {
     height: 100%;
     width: 100%;
-    overflow: hidden;
 }
 
 
@@ -109,6 +108,18 @@ h11{
     border-left-width: 13px;
 }
 
+.sponsored-req{
+    display:block;
+    height: 14vh;
+    width: 100%;
+    display:table;
+    border: solid;
+    border-color: transparent;
+    border-bottom-color: #E0E0E0;
+    border-left-color: #7678ED;
+    border-left-width: 13px;
+}
+
 .req-inner{
     display:table-cell; 
     vertical-align: middle;
@@ -130,10 +141,5 @@ h11{
     margin-top: 10%;
 }
 
-.android{
-    margin-left:3%;
-}
 
-.ios{
-    margin-right:3%;
-}
+.no-title .ui-dialog-titlebar {display:none;}

@@ -1,6 +1,7 @@
 class ApiUserController < ApplicationController
     require "json"
     require 'exceptions'
+    require 'twilio-ruby'
     
     def getLocation
         error = 0
@@ -129,20 +130,25 @@ class ApiUserController < ApplicationController
             error = 11 # rails server error
         ensure
             if(error == 0)
-                str = member.getvalue(0,0)
-                pin = str[0..3]
-                mid = str[4..(str.length - 1)]
-                res = {:error => error, :mid => mid, :pin => pin} # no error
-                puts res
-                account_sid = Rails.application.secrets.twilio_account_sid 
-                auth_token = Rails .application.secrets.twilio_account_token
-                # set up a client to talk to the Twilio REST API 
-                @client = Twilio::REST::Client.new account_sid, auth_token 
-                @client.account.messages.create({
-                    :from => '+15123841298',  # the number of our twilio account
-                    :to => params[:phone], 
-                    :body => 'Code: ' + pin
-                })
+                begin
+                    str = member.getvalue(0,0)
+                    pin = str[0..3]
+                    mid = str[4..(str.length - 1)]
+                    account_sid = Rails.application.secrets.twilio_account_sid 
+                    auth_token = Rails .application.secrets.twilio_account_token
+                    # set up a client to talk to the Twilio REST API 
+                    @client = Twilio::REST::Client.new account_sid, auth_token 
+                    @client.account.messages.create({
+                        :from => '+15123841298',  # the number of our twilio account
+                        :to => params[:phone], 
+                        :body => 'Code: ' + pin
+                    })
+                rescue => er
+                    Rails.logger.error { "#{er.message} #{er.backtrace.join("\n")}" }
+                    error = 14 # Twilio error bad phone number
+                ensure
+                    res = {:error => error, :mid => mid, :pin => pin} # no error
+                end
             else
                 res = {:error => error}
             end
@@ -214,7 +220,7 @@ class ApiUserController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "select confirmed where mid='" + params[:id] + "';"
+            sql = "select confirmed, pin where mid='" + params[:id] + "';"
             result = ActiveRecord::Base.connection.execute(sql)
             if(result.ntuples == 0)
                 error = 1 # mid does not exist in db
@@ -230,7 +236,7 @@ class ApiUserController < ApplicationController
             error = 11 # rails server error
         ensure
             if(error == 0)
-                res = {:error => error, :confirmed => result.getvalue(0,0)}
+                res = {:error => error, :confirmed => result.getvalue(0,0), :pin => result.getvalue(0,1)}
             else
                 res = {:error => error}
             end

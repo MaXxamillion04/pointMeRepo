@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
   
+  # welcome routes
   root 'welcome#index'
   get 'welcome/index'
 
-  resources :member
+  # arrow routes
   resources :arrow
   get '/arrows/:id' => 'arrow#index'
   post '/arrow/showArrow' => 'arrow#show'
+  
+  # place routes
+  post 'place/showArrow' => 'place#show'
   
   # API routes
   
@@ -23,6 +27,8 @@ Rails.application.routes.draw do
     get 'arrow/deny/:id' => 'api_arrow#deny'
     
     resources :place, controller: :api_place
+    get 'place/sponsored/:id' => 'api_place#sponsored'
+    get 'place/getLocation/:id' => 'api_place#getLocation'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

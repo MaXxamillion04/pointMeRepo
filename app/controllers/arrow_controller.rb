@@ -3,6 +3,8 @@ class ArrowController < ApplicationController
     @reciever_mid = params[:id]
     sql = "select full_name, mid, location, aid, deathtime, accepted from arrow inner join member on ( member.mid = any( memberids::text[]) ) where mid != '" + @reciever_mid + "' and memberids @> '{" + @reciever_mid + "}'::text[] order by deathtime desc;"
     result = ActiveRecord::Base.connection.execute(sql)
+    sql = "select place.pid, place.name, place.location, place.deathtime from place inner join member on ( place.location <@> member.location < 3 ) where member.mid='" + @reciever_mid + "' and place.sponsored=true;"
+    places = ActiveRecord::Base.connection.execute(sql)
     
     time_format = '%Y-%m-%d %H:%M:%S'
     time_now = Time.now.utc
@@ -28,6 +30,23 @@ class ArrowController < ApplicationController
       elsif(temp["accepted"] == "t")
         @currently_running << req
       end  
+    end
+    
+    @sponsored = Array.new
+    (0..places.ntuples()-1).each do |i| # do for each sponsored place object
+      temp = places[i]
+      
+      #deathtime = temp["deathtime"][0..(temp["deathtime"].index('.') - 1)]
+      #deathtime = deathtime.sub(' ', 'T')
+      hours_left = Time.strptime(temp["deathtime"][0..(temp["deathtime"].index('.') - 1)], time_format)
+      hours_left = ((hours_left - time_now) / 1.hour).round
+      if (hours_left < 0)
+        hours_left = "(expired)"
+      else
+        hours_left = hours_left.to_s + " hours"
+      end
+      req = {"pid" => temp["pid"], "name" => temp["name"], "hours_left" => hours_left}
+      @sponsored << req
     end
   end
 

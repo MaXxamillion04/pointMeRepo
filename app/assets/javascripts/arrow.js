@@ -1,34 +1,59 @@
 var myLat;
 var myLon;
+var os;
+var browser;
 var d;
 var distanceTimer;
 var localTimer;
 var myID;
 var k;
 var Divs = [];
+var opts = {
+  lines: 11 // The number of lines to draw
+, length: 56 // The length of each line
+, width: 10 // The line thickness
+, radius: 42 // The radius of the inner circle
+, scale: 2.5 // Scales overall size of the spinner
+, corners: 1 // Corner roundness (0..1)
+, color: '#50D2C2' // #rgb or #rrggbb or array of colors
+, opacity: 0 // Opacity of the lines
+, rotate: 0 // The rotation offset
+, direction: 1 // 1: clockwise, -1: counterclockwise
+, speed: 1 // Rounds per second
+, trail: 60 // Afterglow percentage
+, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+, zIndex: 2e9 // The z-index (defaults to 2000000000)
+, className: 'spinner' // The CSS class to assign to the spinner
+, top: '55%' // Top position relative to parent
+, left: '50%' // Left position relative to parent
+, shadow: false // Whether to render a shadow
+, hwaccel: false // Whether to use hardware acceleration
+, position: 'absolute' // Element positioning
+};
+var largest_div;
 
 // *************** Index Methods *************
 
 function initIndex(id, s, num_new, num_running){
+    largest_div = num_new + num_running - 1;
+    if(largest_div != -1) { load(); }
     k = s;
-    $.ui.dialog.prototype._makeDraggable = function() { 
+    determineDevice();
+    /* $.ui.dialog.prototype._makeDraggable = function() { 
         this.uiDialog.draggable({
             containment: false
         });
-    };
+    }; */
      $('#dialog').dialog({
-        autoOpen: false, position: { my: "bottom", at: "bottom+25%"},
-        width: $(window).width(), height: $(window).height() * 0.55,
-        drag: function( event, ui ) {
-            if(ui.position.left > 100){
-                $('#dialog').dialog('close');
-            }
-        }
+        autoOpen: false, position: { my: "bottom", at: "bottom"},
+        width: $(window).width(), height: $(window).height() * 0.55, draggable: false
     });
-    window.setTimeout(function(){
-        $('#dialog').dialog( "open" );
-
-    }, 3000);
+    $("#dialog").bind( "clickoutside", function(event){
+        $(this).hide();
+        });
+    if(os == 'iOS'){ $('#download').attr('src', '/assets/ios.png');}
+    else if(os == 'Android'){ $('#download').attr('src', '/assets/android.png');}
+    
     myID = id;
     localTimer = window.setInterval(function(){
         navigator.geolocation.getCurrentPosition(updateLocal);
@@ -39,12 +64,11 @@ function initIndex(id, s, num_new, num_running){
     }, 30000); // update my location in db every 30 seconds
     
     var i;
-    $('#top-div').append("SUCCESS");
-    for(i = parseInt(num_new); i < (parseInt(num_running) + parseInt(num_new)); i += 1){ Divs.push(i); } // fill divs with the div number of each currently running request
+    //for(i = parseInt(num_new); i < (parseInt(num_running) + parseInt(num_new)); i += 1){ Divs.push(i); } // fill divs with the div number of each currently running request
 }
 
-function calculateIndexDistance(sender_mid, div_num){
-    $.getJSON("http://pointme-hogueyy.c9users.io/api/user/getLocation/" + sender_mid + ".json?k=" + k,
+function calculateIndexDistance(id, div_num, type){
+    $.getJSON("http://pointme-hogueyy.c9users.io/api/" + type + "/getLocation/" + id + ".json?k=" + k,
         function(data, textStatus, jqXHR){
             var fLat = data.latitude;
             var fLon = data.longitude;
@@ -64,6 +88,14 @@ function calculateIndexDistance(sender_mid, div_num){
             d =  Math.round(R * c);
             $('#' + div_num + '-distance').empty();
             $('#' + div_num + '-distance').append("<img class='col-xs-offset-1' src='/assets/distance_icon.png'>" + " " + parseFloat(d) + "m");
+            if(parseInt(div_num) == largest_div){ // once last distance is loaded, stop loading circle
+                window.setTimeout(function(){
+                    $('#loading').dialog('close'); 
+                }, 800);
+            } 
+            window.setTimeout(function(){
+                $('#dialog').dialog( "open" );
+            }, 3000);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX error");
         });
@@ -74,8 +106,6 @@ function calculateIndexDistance(sender_mid, div_num){
 var friendID;
 var friendLat;
 var friendLon;
-var os;
-var browser;
 var map;
 var myMarker;
 var friendMarker;
@@ -84,40 +114,41 @@ var hourTimer;
 var deathtime;
 
 function initShow(fID, mID, s, dtime) {
+    navigator.geolocation.watchPosition(updateLocal);
+    load();
     k = s;
-    determineDevice();
     friendID = fID;
     myID = mID;
-    
-    navigator.geolocation.watchPosition(updateLocal);
     deathtime = dtime;
     updateHours();
     updateFriendLocation();
-    calculateDistance();
     
     window.addEventListener("deviceorientation", updateArrowAngle, true);
     distanceTimer = window.setInterval(function(){
-        updateFriendLocation();
         updateMyLocation();
-        calculateDistance();
+        updateFriendLocation();
     }, 3000);
     
     hourTimer = window.setInterval(function(){
         updateHours();
     }, 120000);
-    
-    updateFriendLocation();
-    // if dist is greater than 1 mile, alert the user. CURRENTLY NOT WORKING
-    var dist = calculateDistance();
-    if(dist > 1600){
-        window.alert("PointMe works best when your friend is nearby. For the best experience, please check back when your friend is closer.");
-    }
+}
+
+function load(){
+    var width = $(window).width() * .82;
+    $('#loading').dialog({
+        autoOpen: true, 
+        width:  width, height: width,
+        dialogClass: 'no-title', modal: true
+    });
+    var target = document.getElementById('loading');
+    var spinner = new Spinner(opts).spin(target);
 }
 
 function updateHours(){
     var hoursLeft = deathtimeToHours(deathtime);
     $('#hours').empty();
-    $('#hours').append(hoursLeft);
+    document.getElementById('hours').innerHTML = " " + hoursLeft;
 }
 
 function updateLocal(position) {
@@ -141,6 +172,7 @@ function updateFriendLocation(){
         function(data, textStatus, jqXHR){
             friendLat = data.latitude;
             friendLon = data.longitude;
+            calculateDistance();
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX error");
         });
@@ -161,7 +193,12 @@ function calculateDistance(){
         Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var dist = R * c;
-    document.getElementById('distance').innerHTML = Math.round(dist) + " m";
+    if(document.getElementById('distance').innerHTML == ""){
+        window.setTimeout(function(){
+            $('#loading').dialog('close');
+        }, 1000);
+    }
+    document.getElementById('distance').innerHTML = " " + Math.round(dist) + " m";
     return dist;
 }
 
@@ -321,7 +358,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
             $(div_num).attr('onclick', 'showArrow("' + mid + '", "' + sender_name + '", "' + sender_mid + '", "' + deathtime + '")');
             $(div_num + '-inner').append("<br><div><h11><div id='" + num + "-distance' class='col-xs-6'></div><div id='" + num + "-hours'></div></h11></div>");
             calculateHoursLeft(deathtime, num);
-            calculateIndexDistance(sender_mid, num);
+            calculateIndexDistance(sender_mid, num, "user");
             //Divs.push(num);
             initializeDivs();
         },
@@ -366,6 +403,16 @@ function initializeDivs(){
     
     else if ($('#no-arrows')){
         $('#no-arrows').remove();
+    }
+    
+    if ($('#sponsored-req').children().length == 0){
+        $('#sponsored-req-title').empty();
+        $('#sponsored-req-title').removeAttr('class');
+    }
+    
+    else if($('#sponsored-req-title').is(':empty')){
+        $('#sponsored-req-title').attr('class', 'req-title');
+        $('#sponsored-req-title').append("<div class='req-inner'><h10 class='col-xs-offset-1'>SPONSORED</h10></div>");
     }
 }
 
@@ -444,4 +491,48 @@ function refresh(){
         calculateIndexDistance($('#' + Divs[i] + '-m').val(), Divs[i]);
         calculateHoursLeft($('#' + Divs[i] + '-deathtime').val(), Divs[i]);
     }
+}
+
+// ******************** PLACE METHODS *********************** \\
+
+function initPlaceShow(location, dtime) {
+    navigator.geolocation.watchPosition(updateLocal);
+    load();
+    deathtime = dtime;
+    updateHours();
+    var locationString = location.replace("(", "").replace(")", ""); // remove parenthesis
+    var latlon = locationString.split(",");
+    friendLat = parseFloat(latlon[0]);
+    friendLon = parseFloat(latlon[1]);
+    calculateDistance();
+    
+    window.addEventListener("deviceorientation", updateArrowAngle, true);
+    distanceTimer = window.setInterval(function(){
+        calculateDistance();
+    }, 3000);
+    
+    hourTimer = window.setInterval(function(){
+        updateHours();
+    }, 120000);
+}
+
+function showPlace(pid, user){
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "http://pointme-hogueyy.c9users.io/place/showArrow");
+    
+    var hiddenFieldpid = document.createElement("input");
+    hiddenFieldpid.setAttribute("type", "hidden");
+    hiddenFieldpid.setAttribute("name", "pid");
+    hiddenFieldpid.setAttribute("value", pid);
+    form.appendChild(hiddenFieldpid);
+    
+    var hiddenFielduser = document.createElement("input");
+    hiddenFielduser.setAttribute("type", "hidden");
+    hiddenFielduser.setAttribute("name", "user");
+    hiddenFielduser.setAttribute("value", user);
+    form.appendChild(hiddenFielduser);
+    
+    document.body.appendChild(form);
+    form.submit();
 }

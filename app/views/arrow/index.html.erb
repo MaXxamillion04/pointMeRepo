@@ -3,10 +3,13 @@
         <link href='https://fonts.googleapis.com/css?family=Nunito:400,700,300' rel='stylesheet' type='text/css'>
     </head>
     <body>
+        <div id='loading'>
+            <div class='container text-center'><h9>Loading greatness...</h9></div>
+        </div>
         <div id='dialog'>
             <div class='dialog-div'><p><h9>Recieving arrows is awesome, but sending them is even better!</h9></p></div>
-            <div class='dialog-div'><p><h9>Download PointMe mobile to send arrows to your friends, and get more accurate location readings.</h9></p></div>
-            <div class='dialog-imgs text-center'><p><img class='ios' src='/assets/ios.png' height="100" width="337"> <img class='android' src='/assets/android.png' height="100" width="337"></p></div>
+            <div class='dialog-div'><p><h9>Download Archer mobile to send arrows to your friends, and get more accurate location readings.</h9></p></div>
+            <div class='dialog-imgs text-center'><p><img id='download' class='ios' height="100" width="337"></p></div>
         </div>
         
         <script>
@@ -91,12 +94,37 @@
                                 <img class='col-xs-offset-5' src='/assets/delete_smaller.png'>
                             </div>
                         </div>
-                        <input id='<%= count.to_s %>-deathtime' type='hidden' value='<%= req["deathtime"]%>'>
-                        <input id='<%= count.to_s %>-m' type='hidden' value='<% req["sender_mid"]%>' >
-                        <script>calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>");</script>
+                        <script>calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>", "user");</script>
                     <%
                     count += 1
     
+                }
+            %>
+        </div>
+        
+        <div id='sponsored-req-title'></div>
+        
+        <div id='sponsored-req'>
+            <% 
+                @sponsored.each { |req| 
+                    %>
+                        <div id='<%= count.to_s %>' class='sponsored-req' onclick='showPlace("<%= req["pid"] %>", "<%= @reciever_mid %>")'>
+                            <div class= 'req-inner req-name'>
+                                <div class='col-xs-offset-1'><h9><%= req["name"] %></h9></div><br>
+                                    <div>
+                                        <h11>
+                                            <div id='<%= count.to_s %>-distance' class='col-xs-6'><img class='col-xs-offset-1' src='/assets/distance_icon.png'></div><div id='<%= count.to_s %>-hours'><img class='col-xs-offset-1' src='/assets/time_icon.png'> <%= req["hours_left"] %></div>
+                                        </h11>
+                                    </div>
+                            </div>
+                            <div class='req-inner'>
+                                <img class='col-xs-offset-5' src='/assets/sponsored.png'>
+                            </div>
+                        </div>
+                        <script>calculateIndexDistance("<%= req["pid"] %>", "<%= count.to_s %>", "place");</script>
+                    <%
+                    count += 1
+                    
                 }
             %>
         </div>
