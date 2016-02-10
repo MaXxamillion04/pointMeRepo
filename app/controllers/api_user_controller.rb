@@ -79,7 +79,7 @@ class ApiUserController < ApplicationController
             end
             sql = "select full_name from member where phone='" + params[:phone] + "';"
             member = ActiveRecord::Base.connection.execute(sql)
-            sql = "select mid,full_name from member where phone='" + params[:phone] + "' and password='" + params[:password] + "';"
+            sql = "select mid,full_name,confirmed,pin from member where phone='" + params[:phone] + "' and password='" + params[:password] + "';"
             mid = ActiveRecord::Base.connection.execute(sql)
             if(params[:format] != "json")
                 Rails.logger.error {"***UnknownFormat Exception was caught***"}
@@ -99,7 +99,7 @@ class ApiUserController < ApplicationController
                     error = 4 # wrong phone/ pasword combo
                     res = {:error => error}
                 else
-                    res = {:error => error, :mid => mid.getvalue(0,0), :full_name => mid.getvalue(0,1)} # no error
+                    res = {:error => error, :mid => mid.getvalue(0,0), :full_name => mid.getvalue(0,1), :confirmed => mid.getvalue(0,2), :pin => mid.getvalue(0,3)} # no error
                 end
             else
                 res = {:error => error}
@@ -242,5 +242,50 @@ class ApiUserController < ApplicationController
             end
         end
         render :json => res.to_json
+    end
+    
+    def resend
+        error = 0
+        begin
+            if(params[:k] != Rails.application.secrets.mobile_api_key)
+                raise Exceptions::InvalidApiKey
+            end
+            sql = "select pin, phone from member where mid='" + params[:id] + "';"
+            member = ActiveRecord::Base.connection.execute(sql)
+            if(member.ntuples == 0)
+                error = 1 # mid does not exist in db
+            end
+            if(params[:format] != "json")
+                Rails.logger.error {"***UnknownFormat Exception was caught***"}
+                error = 12
+            end
+        rescue Exceptions::InvalidApiKey => invapi
+            error = 13 # invalid API key
+        rescue => e
+            Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+            error = 11 # rails server error
+        ensure
+            if(error == 0)
+                begin
+                    account_sid = Rails.application.secrets.twilio_account_sid 
+                    auth_token = Rails .application.secrets.twilio_account_token
+                    # set up a client to talk to the Twilio REST API 
+                    @client = Twilio::REST::Client.new account_sid, auth_token 
+                    @client.account.messages.create({
+                        :from => '+15123841298',  # the number of our twilio account
+                        :to => member[0]["phone"], 
+                        :body => 'Code: ' + member[0]["pin"]
+                    })
+                rescue => er
+                    Rails.logger.error { "#{er.message} #{er.backtrace.join("\n")}" }
+                    error = 14 # Twilio error bad phone number
+                ensure
+                    res = {:error => error} # no error
+                end
+            else
+                res = {:error => error}
+            end
+            render :json => res.to_json
+        end
     end
 end

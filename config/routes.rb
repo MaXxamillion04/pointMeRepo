@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     put 'user/putLocation/:id' => 'api_user#putLocation'
     post 'user/auth' => 'api_user#authenticate'
     get 'user/confirm/:id' => 'api_user#confirm'
+    get 'user/resend/:id' => 'api_user#resend'
     
     resources :arrow, controller: :api_arrow
     get 'arrows/:id' => 'api_arrow#index'

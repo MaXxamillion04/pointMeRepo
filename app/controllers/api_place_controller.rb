@@ -54,10 +54,10 @@ class ApiPlaceController < ApplicationController
                     if(location.getvalue(0,0) == "")
                         error = 2
                     end
-                    res = {'error' => error, 'latitude' => location.getvalue(0,0), 'longitude' => location.getvalue(0,1)}
+                    res = {:error => error, :latitude => location.getvalue(0,0), :longitude => location.getvalue(0,1)}
                 end
             else
-                res = {'error' => error}
+                res = {:error => error}
             end
             render :json => res.to_json
         end

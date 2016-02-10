@@ -36,7 +36,8 @@ var largest_div;
 
 function initIndex(id, s, num_new, num_running){
     largest_div = num_new + num_running - 1;
-    if(largest_div != -1) { load(); }
+    if(num_running != 0) {  load(); }
+    else { $('#loading').remove(); }
     k = s;
     determineDevice();
     /* $.ui.dialog.prototype._makeDraggable = function() { 
@@ -64,7 +65,7 @@ function initIndex(id, s, num_new, num_running){
         updateMyLocation();
     }, 30000); // update my location in db every 30 seconds
     
-    var i;
+    //var i;
     //for(i = parseInt(num_new); i < (parseInt(num_running) + parseInt(num_new)); i += 1){ Divs.push(i); } // fill divs with the div number of each currently running request
 }
 
@@ -265,8 +266,7 @@ function updateArrowAngle(event){
     var bearing = Math.atan2(y, x) * 180/Math.PI;
     var orientation = normaliseOrientation(event);
     
-    var newArrowAngle = bearing - orientation;
-    if(newArrowAngle < 0){ newArrowAngle += 360; }
+    var newArrowAngle = (360 - orientation);
     $("#arrow").rotate(newArrowAngle);
 }
 
@@ -343,7 +343,7 @@ function initMap(){
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     $.ajax({
-        url: "http://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k,
+        url: "https://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
         success: function(result) {
             var num = div_num;
@@ -372,7 +372,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
 
 function deny(div_num, aid){
     $.ajax({
-        url: "http://pointme-hogueyy.c9users.io/api/arrow/deny/" + aid + ".json?k=" + k,
+        url: "https://pointme-hogueyy.c9users.io/api/arrow/deny/" + aid + ".json?k=" + k,
         type: 'GET',
         success: function(result) {
             div_num = '#' + div_num;
@@ -422,7 +422,7 @@ function deleteArrow(div_num, aid){
     var num = div_num;
     if( choice == true ){
        $.ajax({
-            url: "http://pointme-hogueyy.c9users.io/api/arrow/" + aid + ".json?k=" + k,
+            url: "https://pointme-hogueyy.c9users.io/api/arrow/" + aid + ".json?k=" + k,
             type: 'DELETE',
             success: function(result) {
                 div_num = '#' + div_num;
