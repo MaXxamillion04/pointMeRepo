@@ -35,20 +35,20 @@ html, body {
 }
 
 .arrow-div{
-    height: 57%;
+    height: 56%;
     width: 100%;
     background-color: #50D2C2;
 }
 
 .footer-left-div{
-    height: 13%;
+    height: 14%;
     width: 50%;
     display:table;
     background-color: #41AA9D;
 }
 
 .footer-right-div{
-    height: 13%;
+    height: 14%;
     width: 50%;
     display:table;
 }
