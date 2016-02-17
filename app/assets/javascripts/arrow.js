@@ -343,6 +343,7 @@ function initMap(){
 }
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
+    var url = http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k;
     $.ajax({
         url: http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
@@ -366,6 +367,8 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
         },
         error: function(result){
             window.alert("Sorry, something went wrong please try again. If this continues please report the issue.");
+            $('top-div').append(url);
+            
         }
     });
     
