@@ -329,11 +329,14 @@ function initMap(){
         position: {lat: parseFloat(friendLat), lng: parseFloat(friendLon)}
     });
     
+    var imagePath = '/assets/map_arrow.png';
      myMarker = new google.maps.Marker({
         map: map,
         position: {lat: myLat, lng: myLon},
-        icon: '/assets/map_arrow.png'
+        icon: imagePath
     });
+    imagePath = '/assets/map_arrow.png#myMarker';
+    $('img[src="/assets/map_arrow.png#myMarker"]').rotate(90);
     
     mapTimer = window.setInterval(function(){
         myMarker.setPosition({lat: myLat, lng: myLon});
