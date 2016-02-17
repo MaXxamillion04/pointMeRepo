@@ -294,7 +294,8 @@ function redirect(url){
 function toMap(){
     $('#right-footer-image').attr('src', '/assets/arrow_icon.png');
     $('#arrow').remove();
-    $('#arrow-div').append("<div id='map' class='map'></div><div id='pano' class='map'></div>");
+    $('#arrow-div').append("<div id='map' class='map'></div>");
+    window.removeEventListener('deviceorientation');
     initMap();
     $('#right-footer').attr('onclick', 'toArrow()');
 }
@@ -327,6 +328,11 @@ function initMap(){
         position: {lat: parseFloat(friendLat), lng: parseFloat(friendLon)}
     });
     
+     myMarker = new google.maps.Marker({
+        map: map,
+        position: {lat: myLat, lng: myLon}
+    });
+    
     mapTimer = window.setInterval(function(){
         myMarker.setPosition({lat: myLat, lng: myLon});
         friendMarker.setPosition({lat: parseFloat(friendLat), lng: parseFloat(friendLon)});
@@ -334,7 +340,6 @@ function initMap(){
 }
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
-    var url = http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k
     $.ajax({
         url: http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
@@ -358,8 +363,6 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
         },
         error: function(result){
             window.alert("Sorry, something went wrong please try again. If this continues please report the issue.");
-            $('#top-div').append(url);
-            
         }
     });
     
