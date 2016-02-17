@@ -151,7 +151,7 @@ function updateLocal(position) {
 
 function updateMyLocation(){
     $.ajax({
-        url "/api/user/putLocation/" + myID + ".json",
+        url: "/api/user/putLocation/" + myID + ".json",
         type: 'PUT',
         data: {latitude: myLat, longitude: myLon, k: k},
         error: function(result){
@@ -161,7 +161,7 @@ function updateMyLocation(){
 }
 
 function updateFriendLocation(){
-    $.getJSON(/api/user/getLocation/" + friendID + ".json?k=" + k,
+    $.getJSON("/api/user/getLocation/" + friendID + ".json?k=" + k,
         function(data, textStatus, jqXHR){
             friendLat = data.latitude;
             friendLon = data.longitude;
@@ -344,7 +344,7 @@ function initMap(){
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     $.ajax({
-        url "/api/arrow/accept/" + aid + ".json?k=" + k ,
+        url: "/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
         success: function(result) {
             var num = div_num;
@@ -375,7 +375,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
 
 function deny(div_num, aid){
     $.ajax({
-        url "/api/arrow/deny/" + aid + ".json?k=" + k,
+        url: "/api/arrow/deny/" + aid + ".json?k=" + k,
         type: 'GET',
         success: function(result) {
             div_num = '#' + div_num;
@@ -425,7 +425,7 @@ function deleteArrow(div_num, aid){
     var num = div_num;
     if( choice == true ){
        $.ajax({
-            url "/api/arrow/" + aid + ".json?k=" + k,
+            url: "/api/arrow/" + aid + ".json?k=" + k,
             type: 'DELETE',
             success: function(result) {
                 div_num = '#' + div_num;
@@ -530,7 +530,7 @@ function initPlaceShow(location, dtime) {
 function showPlace(pid, user){
     var form = document.createElement("form");
     form.setAttribute("method", "post");
-    form.setAttribute("action", /place/showArrow");
+    form.setAttribute("action", "/place/showArrow");
     
     var hiddenFieldpid = document.createElement("input");
     hiddenFieldpid.setAttribute("type", "hidden");
