@@ -27,7 +27,7 @@
         <div id='top-div' class='top-div'>
             <div class='req-inner'>
                 <div class="dropdown">
-                    <img src='/assets/bubbles.png' class="dropdown-toggle col-xs-offset-3" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <img src='/assets/images/bubbles.png' class="dropdown-toggle col-xs-offset-3" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <h9><li><a href="/">Home</a></li></h9>
                     </ul>
@@ -40,7 +40,7 @@
             </div>
             <div class='req-inner'>
                 <div class="dropdown">
-                    <img src='/assets/bubbles.png' class=" dropdown-toggle col-xs-offset-6" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <img src='/assets/images/bubbles.png' class=" dropdown-toggle col-xs-offset-6" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                         <h9><li><a href="/">Home</a></li></h9>
                     </ul>
@@ -51,7 +51,7 @@
         <div id='download' class='download-div'>
             <div class='inner-download'>
                 <p class='col-xs-11'><h12>Want to send arrows to your friends and get more accurate location readings?</h12></p>
-                <button class='close-download' onclick='$("#download").remove();'><img src='/assets/x.png' height='60px' width='60px'></button>
+                <button class='close-download' onclick='$("#download").remove();'><img src='/assets/images/x.png' height='60px' width='60px'></button>
                 <p class='col-xs-11'><h12>Click here to download our mobile app!</h12></p>
             </div>
         </div>
@@ -71,14 +71,14 @@
                                     </div>
                                 </div>
                                 <div class='req-inner'>
-                                    <img id='<%= count.to_s %>-approve' src='/assets/approve_smaller.png' onclick='approve("<%= count.to_s %>", 
+                                    <img id='<%= count.to_s %>-approve' src='/assets/images/approve_smaller.png' onclick='approve("<%= count.to_s %>", 
                                                                                                             "<%= @reciever_mid %>", 
                                                                                                             "<%= req["aid"] %>", 
                                                                                                             "<%= req["sender_mid"] %>",
                                                                                                             "<%= req["sender_name"] %>",
                                                                                                             "<%= req["deathtime"] %>")'>
         
-                                    <img id='<%= count.to_s %>-deny' class='col-xs-offset-1' src='/assets/deny_smaller.png' onclick='deny("<%= count.to_s %>", 
+                                    <img id='<%= count.to_s %>-deny' class='col-xs-offset-1' src='/assets/images/deny_smaller.png' onclick='deny("<%= count.to_s %>", 
                                                                                                                                 "<%= req["aid"] %>")'>
                                 </div>
                             </div>
@@ -104,12 +104,12 @@
                                 <div class='col-xs-offset-1'><h9><%= req["sender_name"] %></h9></div><br>
                                     <div>
                                         <h11>
-                                            <div id='<%= count.to_s %>-distance' class='col-xs-6'><img class='col-xs-offset-1' src='/assets/distance_icon.png'></div><div id='<%= count.to_s %>-hours'><img class='col-xs-offset-1' src='/assets/time_icon.png'> <%= req["hours_left"] %></div>
+                                            <div id='<%= count.to_s %>-distance' class='col-xs-6'><img class='col-xs-offset-1' src='/assets/images/distance_icon.png'></div><div id='<%= count.to_s %>-hours'><img class='col-xs-offset-1' src='/assets/images/time_icon.png'> <%= req["hours_left"] %></div>
                                         </h11>
                                     </div>
                             </div>
                             <div class='req-inner' onclick='deleteArrow("<%= count.to_s %>","<%= req["aid"] %>")'>
-                                <img class='col-xs-offset-5' src='/assets/delete_smaller.png'>
+                                <img class='col-xs-offset-5' src='/assets/images/delete_smaller.png'>
                             </div>
                         </div>
                         <script>calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>", "user");</script>
@@ -131,7 +131,7 @@
                                 <div class='col-xs-offset-1'><h9><%= req["name"] %></h9></div><br>
                                     <div>
                                         <h11>
-                                            <div id='<%= count.to_s %>-distance' class='col-xs-6'><img class='col-xs-offset-1' src='/assets/distance_icon.png'></div><div id='<%= count.to_s %>-hours'><img class='col-xs-offset-1' src='/assets/time_icon.png'> <%= req["hours_left"] %></div>
+                                            <div id='<%= count.to_s %>-distance' class='col-xs-6'><img class='col-xs-offset-1' src='/assets/images/distance_icon.png'></div><div id='<%= count.to_s %>-hours'><img class='col-xs-offset-1' src='/assets/images/time_icon.png'> <%= req["hours_left"] %></div>
                                         </h11>
                                     </div>
                             </div>
