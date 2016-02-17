@@ -109,7 +109,6 @@ function initShow(fID, mID, s, dtime) {
     deathtime = dtime;
     updateHours();
     updateFriendLocation();
-    $('#arrow').rotate(90);
     window.setTimeout(function(){
         if(myLat == null){
             $('#loading').dialog('close');
