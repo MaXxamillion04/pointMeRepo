@@ -319,7 +319,8 @@ function initMap(){
     map = new google.maps.Map(document.getElementById('map'), {
         center: bound.getCenter(),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
-        scrollwheel: true
+        scrollwheel: true,
+        tilt: 0
       });
     map.fitBounds(bound);
     
@@ -330,7 +331,8 @@ function initMap(){
     
      myMarker = new google.maps.Marker({
         map: map,
-        position: {lat: myLat, lng: myLon}
+        position: {lat: myLat, lng: myLon},
+        icon: '/assets/map_arrow.png'
     });
     
     mapTimer = window.setInterval(function(){
