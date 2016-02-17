@@ -1,12 +1,15 @@
 <html>
     <head>
+         <script src='/assets/jQueryRotate.js'></script>
+         <script src='/assets/spin.min.js'></script>
         <link href='https://fonts.googleapis.com/css?family=Nunito:400,700,300' rel='stylesheet' type='text/css'>
     </head>
     <body>
-        <div id='loading'>
-            <div class='container text-center'><h9>Loading greatness...</h9></div>
-        </div>
-        <div id='top-div' class='top-div'></div><div class='name-div'>
+        <div id='loading-div'><div id='location-error' class='container'></div></div>
+        <div id='loading'></div>
+        <div id='top-div' class='top-div'></div>
+        
+        <div class='name-div'>
             <div class='text-center'>
                 <b><h8><%= @friend_name %></h8></b>
             </div>

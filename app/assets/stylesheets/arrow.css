@@ -4,12 +4,20 @@ html, body {
     width: 100%;
 }
 
+.loading-div{
+    height: 8%;
+    width: 100%;
+}
 
 .top-div{
     height: 10%;
     width: 100%;
     background-color: #50D2C2;
     display:table;
+}
+
+.location-error{
+    color: red;
 }
 
 .name-div{
@@ -52,8 +60,33 @@ html, body {
 }
 
 .map{
+    float: left;
     height: 100%;
+    width: 45%;
+}
+
+.download-div{
+    display:block;
+    display:table;
+    height: 13%;
     width: 100%;
+    background-color: #7678ED;
+}
+
+.inner-download{
+    display:block;
+    height: 100%;
+    width: 96%;
+    background-color: #7678ED;
+    color: white;
+    margin-left: 4%;
+}
+
+.close-download{
+    background-color: transparent;
+    border: none;
+    margin-top: 1%;
+    margin-left: -2%;
 }
 
 h8{
@@ -74,6 +107,11 @@ h10{
 
 h11{
     font-size: 275%;
+    font-family: 'Nunito', sans-serif;
+}
+
+h12{
+    font-size: 200%;
     font-family: 'Nunito', sans-serif;
 }
 

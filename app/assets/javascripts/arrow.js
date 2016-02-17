@@ -7,12 +7,11 @@ var distanceTimer;
 var localTimer;
 var myID;
 var k;
-var Divs = [];
 var opts = {
   lines: 11 // The number of lines to draw
-, length: 56 // The length of each line
-, width: 10 // The line thickness
-, radius: 42 // The radius of the inner circle
+, length: 10 // The length of each line
+, width: 3 // The line thickness
+, radius: 7 // The radius of the inner circle
 , scale: 2.5 // Scales overall size of the spinner
 , corners: 1 // Corner roundness (0..1)
 , color: '#50D2C2' // #rgb or #rrggbb or array of colors
@@ -31,32 +30,24 @@ var opts = {
 , position: 'absolute' // Element positioning
 };
 var largest_div;
+var http;
 
 // *************** Index Methods *************
 
-function initIndex(id, s, num_new, num_running){
-    largest_div = num_new + num_running - 1;
-    if(num_running != 0) {  load(); }
-    else { $('#loading').remove(); }
+function initIndex(id, s, num_new, num_running, sponsored){
     k = s;
-    determineDevice();
-    /* $.ui.dialog.prototype._makeDraggable = function() { 
-        this.uiDialog.draggable({
-            containment: false
-        });
-    }; */
-     $('#dialog').dialog({
-        autoOpen: false, position: { my: "bottom", at: "bottom"},
-        width: $(window).width(), height: $(window).height() * 0.55, 
-        draggable: false, dialogClass: 'no-title'
-    });
-    $("#dialog").bind( "clickoutside", function(event){
-        $(this).hide();
-        });
-    if(os == 'iOS'){ $('#download').attr('src', '/assets/ios.png');}
-    else if(os == 'Android'){ $('#download').attr('src', '/assets/android.png');}
-    
+    if((parseInt(num_running) + parseInt(sponsored)) != 0) { load(); }
+    else { $('#loading').remove(); }
+    largest_div = parseInt(num_new) + parseInt(num_running) + parseInt(sponsored) - 1;
     myID = id;
+    
+    window.setTimeout(function(){
+        if(myLat == null){
+            $('#loading').dialog('close');
+            $('#location-error').attr('class', 'container location-error');
+            $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
+        }
+    }, 7000);
     localTimer = window.setInterval(function(){
         navigator.geolocation.getCurrentPosition(updateLocal);
     }, 3000); // update my location locally every 3 seconds
@@ -64,13 +55,10 @@ function initIndex(id, s, num_new, num_running){
     distanceTimer = window.setInterval(function(){
         updateMyLocation();
     }, 30000); // update my location in db every 30 seconds
-    
-    //var i;
-    //for(i = parseInt(num_new); i < (parseInt(num_running) + parseInt(num_new)); i += 1){ Divs.push(i); } // fill divs with the div number of each currently running request
 }
 
 function calculateIndexDistance(id, div_num, type){
-    $.getJSON("http://pointme-hogueyy.c9users.io/api/" + type + "/getLocation/" + id + ".json?k=" + k,
+    $.getJSON(http + "://pointme-hogueyy.c9users.io/api/" + type + "/getLocation/" + id + ".json?k=" + k,
         function(data, textStatus, jqXHR){
             var fLat = data.latitude;
             var fLon = data.longitude;
@@ -91,13 +79,9 @@ function calculateIndexDistance(id, div_num, type){
             $('#' + div_num + '-distance').empty();
             $('#' + div_num + '-distance').append("<img class='col-xs-offset-1' src='/assets/distance_icon.png'>" + " " + parseFloat(d) + "m");
             if(parseInt(div_num) == largest_div){ // once last distance is loaded, stop loading circle
-                window.setTimeout(function(){
-                    $('#loading').dialog('close'); 
-                }, 800);
+                $('#loading').dialog('close'); 
+                $('#loading-div').removeAttr('class');
             } 
-            window.setTimeout(function(){
-                $('#dialog').dialog( "open" );
-            }, 3000);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX error");
         });
@@ -116,15 +100,23 @@ var hourTimer;
 var deathtime;
 
 function initShow(fID, mID, s, dtime) {
-    navigator.geolocation.watchPosition(updateLocal);
-    load();
+    determineDevice();
     k = s;
+    navigator.geolocation.watchPosition(updateLocal);
+   // load();
     friendID = fID;
     myID = mID;
     deathtime = dtime;
     updateHours();
     updateFriendLocation();
     
+    window.setTimeout(function(){
+        if(myLat == null){
+            $('#loading').dialog('close');
+            $('#location-error').attr('class', 'container location-error');
+            $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
+        }
+    }, 7000);
     window.addEventListener("deviceorientation", updateArrowAngle, true);
     distanceTimer = window.setInterval(function(){
         updateMyLocation();
@@ -137,10 +129,9 @@ function initShow(fID, mID, s, dtime) {
 }
 
 function load(){
-    var width = $(window).width() * .82;
     $('#loading').dialog({
         autoOpen: true, 
-        width:  width, height: width,
+        width:  $(window).width(), height: $(window).height() * .1, position: {my: "top", at: "top"},
         dialogClass: 'no-title', modal: true
     });
     var target = document.getElementById('loading');
@@ -160,7 +151,7 @@ function updateLocal(position) {
 
 function updateMyLocation(){
     $.ajax({
-        url: "http://pointme-hogueyy.c9users.io/api/user/putLocation/" + myID + ".json",
+        url: http + "://pointme-hogueyy.c9users.io/api/user/putLocation/" + myID + ".json",
         type: 'PUT',
         data: {latitude: myLat, longitude: myLon, k: k},
         error: function(result){
@@ -170,7 +161,7 @@ function updateMyLocation(){
 }
 
 function updateFriendLocation(){
-    $.getJSON("http://pointme-hogueyy.c9users.io/api/user/getLocation/" + friendID + ".json?k=" + k,
+    $.getJSON(http + "://pointme-hogueyy.c9users.io/api/user/getLocation/" + friendID + ".json?k=" + k,
         function(data, textStatus, jqXHR){
             friendLat = data.latitude;
             friendLon = data.longitude;
@@ -182,25 +173,29 @@ function updateFriendLocation(){
 
 // using formula here: http://www.movable-type.co.uk/scripts/latlong.html
 function calculateDistance(){
-    var R = 6371000; // metres
-    var myLatRad = Math.PI * myLat/180;
-	var friendLatRad = Math.PI * friendLat/180;
-	var myLonRad = Math.PI * myLon/180;
-	var friendLonRad = Math.PI * friendLon/180;
-	var deltaLat = friendLatRad - myLatRad;
-	var deltaLon = friendLonRad - myLonRad;
-	
-	var a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
-        Math.cos(myLatRad) * Math.cos(friendLatRad) *
-        Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    var dist = R * c;
-    if(document.getElementById('distance').innerHTML == ""){
-        window.setTimeout(function(){
-            $('#loading').dialog('close');
-        }, 1000);
-    }
-    document.getElementById('distance').innerHTML = " " + Math.round(dist) + " m";
+    dist = 0;
+    //if(myLat != null){
+        var R = 6371000; // metres
+        var myLatRad = Math.PI * myLat/180;
+    	var friendLatRad = Math.PI * friendLat/180;
+    	var myLonRad = Math.PI * myLon/180;
+    	var friendLonRad = Math.PI * friendLon/180;
+    	var deltaLat = friendLatRad - myLatRad;
+    	var deltaLon = friendLonRad - myLonRad;
+    	
+    	var a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+            Math.cos(myLatRad) * Math.cos(friendLatRad) *
+            Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var dist = R * c;
+        if(document.getElementById('distance').innerHTML == ""){
+            window.setTimeout(function(){
+                $('#loading').dialog('close'); 
+                $('#loading-div').removeAttr('class');
+            }, 1000);
+        }
+        document.getElementById('distance').innerHTML = " " + Math.round(dist) + " m";
+    //}
     return dist;
 }
 
@@ -250,6 +245,8 @@ function determineDevice(){
         browser = "Unknown";
         os = "Unknown";
     }
+    if(os == "iOS"){ http = "http"; }
+    else{ http = "https"; }
 }
 
 // using formula here: http://www.movable-type.co.uk/scripts/latlong.html
@@ -258,15 +255,16 @@ function updateArrowAngle(event){
 	var friendLatRad = Math.PI * friendLat/180;
 	var myLonRad = Math.PI * myLat/180;
 	var friendLonRad = Math.PI * friendLat/180;
+	var deltaLon = (friendLon - myLon) * Math.PI/180;
 	
-    var y = Math.sin(friendLonRad - myLonRad) * Math.cos(friendLatRad);
-    var x = Math.cos(myLatRad)*Math.sin(friendLatRad) -
-        Math.sin(myLatRad) * Math.cos(friendLatRad) * Math.cos(friendLonRad - myLonRad);
+    var y = Math.sin(deltaLon) * Math.cos(friendLatRad);
+    var x = (Math.cos(myLatRad)*Math.sin(friendLatRad)) -
+        (Math.sin(myLatRad) * Math.cos(friendLatRad) * Math.cos(deltaLon));
         
     var bearing = Math.atan2(y, x) * 180/Math.PI;
     var orientation = normaliseOrientation(event);
     
-    var newArrowAngle = (360 - orientation);
+    var newArrowAngle = (360 - orientation) + bearing;
     $("#arrow").rotate(newArrowAngle);
 }
 
@@ -295,9 +293,8 @@ function redirect(url){
 
 function toMap(){
     $('#right-footer-image').attr('src', '/assets/arrow_icon.png');
-    window.removeEventListener("deviceorientation", updateArrowAngle);
     $('#arrow').remove();
-    $('#arrow-div').append("<div id='map' class='map'></div>");
+    $('#arrow-div').append("<div id='map' class='map'></div><div id='pano' class='map'></div>");
     initMap();
     $('#right-footer').attr('onclick', 'toArrow()');
 }
@@ -310,7 +307,7 @@ function toArrow(){
     $('#map').remove();
     $('#right-footer-image').attr('src', '/assets/globe.png');
     $('#arrow-div').append("<img id='arrow' src='/assets/UP_ARROW_half.png'>");
-    window.addEventListener("deviceorientation", updateArrowAngle, true)
+    window.addEventListener("deviceorientation", updateArrowAngle, true);
     $('#right-footer').attr('onclick', 'toMap()');
 }
 
@@ -324,7 +321,8 @@ function initMap(){
         scrollwheel: true
       });
     map.fitBounds(bound);
-  
+
+  map.setStreetView(panorama);
     myMarker = new google.maps.Marker({
         map: map,
         position: {lat: myLat, lng: myLon}
@@ -338,12 +336,12 @@ function initMap(){
     mapTimer = window.setInterval(function(){
         myMarker.setPosition({lat: myLat, lng: myLon});
         friendMarker.setPosition({lat: parseFloat(friendLat), lng: parseFloat(friendLon)});
-    }, 3000);
+    }, 1000);
 }
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     $.ajax({
-        url: "https://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k ,
+        url: http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
         success: function(result) {
             var num = div_num;
@@ -372,7 +370,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
 
 function deny(div_num, aid){
     $.ajax({
-        url: "https://pointme-hogueyy.c9users.io/api/arrow/deny/" + aid + ".json?k=" + k,
+        url: http + "://pointme-hogueyy.c9users.io/api/arrow/deny/" + aid + ".json?k=" + k,
         type: 'GET',
         success: function(result) {
             div_num = '#' + div_num;
@@ -422,7 +420,7 @@ function deleteArrow(div_num, aid){
     var num = div_num;
     if( choice == true ){
        $.ajax({
-            url: "https://pointme-hogueyy.c9users.io/api/arrow/" + aid + ".json?k=" + k,
+            url: http + "://pointme-hogueyy.c9users.io/api/arrow/" + aid + ".json?k=" + k,
             type: 'DELETE',
             success: function(result) {
                 div_num = '#' + div_num;
@@ -497,8 +495,9 @@ function refresh(){
 // ******************** PLACE METHODS *********************** \\
 
 function initPlaceShow(location, dtime) {
+    determineDevice();
     navigator.geolocation.watchPosition(updateLocal);
-    load();
+    //load();
     deathtime = dtime;
     updateHours();
     var locationString = location.replace("(", "").replace(")", ""); // remove parenthesis
@@ -507,11 +506,17 @@ function initPlaceShow(location, dtime) {
     friendLon = parseFloat(latlon[1]);
     calculateDistance();
     
+    window.setTimeout(function(){
+        if(myLat == null){
+            $('#loading').dialog('close'); 
+            $('#location-error').attr('class', 'container location-error');
+            $('#location-error').append("Location error: please make sure your phone has location enabled and then refresh the page.");
+        }
+    }, 7000);
     window.addEventListener("deviceorientation", updateArrowAngle, true);
     distanceTimer = window.setInterval(function(){
         calculateDistance();
     }, 3000);
-    
     hourTimer = window.setInterval(function(){
         updateHours();
     }, 120000);
@@ -520,7 +525,7 @@ function initPlaceShow(location, dtime) {
 function showPlace(pid, user){
     var form = document.createElement("form");
     form.setAttribute("method", "post");
-    form.setAttribute("action", "http://pointme-hogueyy.c9users.io/place/showArrow");
+    form.setAttribute("action", http + "://pointme-hogueyy.c9users.io/place/showArrow");
     
     var hiddenFieldpid = document.createElement("input");
     hiddenFieldpid.setAttribute("type", "hidden");

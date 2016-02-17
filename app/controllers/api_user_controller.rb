@@ -77,9 +77,9 @@ class ApiUserController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "select full_name from member where phone='" + params[:phone] + "';"
+            sql = "select full_name from member where phone=" + params[:phone] + ";"
             member = ActiveRecord::Base.connection.execute(sql)
-            sql = "select mid,full_name,confirmed,pin from member where phone='" + params[:phone] + "' and password='" + params[:password] + "';"
+            sql = "select mid,full_name,confirmed,pin from member where phone=" + params[:phone] + " and password='" + params[:password] + "';"
             mid = ActiveRecord::Base.connection.execute(sql)
             if(params[:format] != "json")
                 Rails.logger.error {"***UnknownFormat Exception was caught***"}
