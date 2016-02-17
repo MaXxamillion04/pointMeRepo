@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <div class='req-inner'>
-                            <img id='<%= count.to_s %>-approve' src='/assets/approve_smaller.png' onclick='approve("<%= count.to_s %>", 
+                            <img id='<%= count.to_s %>-approve' src='<%= image_tag 'approve_smaller.png' %>' onclick='approve("<%= count.to_s %>", 
                                                                                                     "<%= @reciever_mid %>", 
                                                                                                     "<%= req["aid"] %>", 
                                                                                                     "<%= req["sender_mid"] %>",
