@@ -57,7 +57,7 @@ class ApiArrowController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "insert into arrow (aid, memberids) values ( get_new_id('aid'), get_mids(" + params[:sender] + "," + params[:receiver] + ") ) returning aid;"
+            sql = "select get_arrow(" + params[:sender] + "," + params[:receiver] + ");"
             result = ActiveRecord::Base.connection.execute(sql)
             
             sql = "select mid from member where phone=" + params[:receiver] + ";"
@@ -89,7 +89,7 @@ class ApiArrowController < ApplicationController
                     :to => params[:receiver], 
                     :body => sender.getvalue(0,0) + ' has sent you a request on Archer! Click here, and follow the arrow to find this wonderful human: https://pointme-hogueyy.c9users.io/arrows/' + reciever.getvalue(0,0)
                 })
-                res = {:error => error, :aid => result.getvalue(0,0)}
+                res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)]}
             else
                 res = {:error => error}
             end
