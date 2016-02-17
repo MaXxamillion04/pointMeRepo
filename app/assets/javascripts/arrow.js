@@ -320,7 +320,8 @@ function initMap(){
         center: bound.getCenter(),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         scrollwheel: true,
-        tilt: 0
+        tilt: 0,
+        heading: 90
       });
     map.fitBounds(bound);
     
@@ -329,14 +330,11 @@ function initMap(){
         position: {lat: parseFloat(friendLat), lng: parseFloat(friendLon)}
     });
     
-    var imagePath = '/assets/map_arrow.png';
      myMarker = new google.maps.Marker({
         map: map,
         position: {lat: myLat, lng: myLon},
-        icon: imagePath
+        icon: '/assets/map_arrow.png'
     });
-    imagePath = '/assets/map_arrow.png#myMarker';
-    $('img[src="/assets/map_arrow.png#myMarker"]').rotate(90);
     
     mapTimer = window.setInterval(function(){
         myMarker.setPosition({lat: myLat, lng: myLon});
