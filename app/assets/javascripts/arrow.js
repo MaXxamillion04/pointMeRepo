@@ -36,8 +36,8 @@ var http;
 
 function initIndex(id, s, num_new, num_running, sponsored){
     k = s;
-    if((parseInt(num_running) + parseInt(sponsored)) != 0) { load(); }
-    else { $('#loading').remove(); }
+    //if((parseInt(num_running) + parseInt(sponsored)) != 0) { load(); }
+    //else { $('#loading').remove(); }
     largest_div = parseInt(num_new) + parseInt(num_running) + parseInt(sponsored) - 1;
     myID = id;
     
@@ -321,12 +321,6 @@ function initMap(){
         scrollwheel: true
       });
     map.fitBounds(bound);
-
-  map.setStreetView(panorama);
-    myMarker = new google.maps.Marker({
-        map: map,
-        position: {lat: myLat, lng: myLon}
-    });
     
      friendMarker = new google.maps.Marker({
         map: map,
@@ -340,6 +334,7 @@ function initMap(){
 }
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
+    var url = http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k
     $.ajax({
         url: http + "://pointme-hogueyy.c9users.io/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
@@ -363,6 +358,8 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
         },
         error: function(result){
             window.alert("Sorry, something went wrong please try again. If this continues please report the issue.");
+            $('#top-div').append(url);
+            
         }
     });
     
