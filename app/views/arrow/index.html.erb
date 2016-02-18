@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <div class='req-inner'>
-                            <img id='<%= count.to_s %>-approve' src='<%= image_tag 'approve_smaller.png' %>' onclick='approve("<%= count.to_s %>", 
+                            <img id='<%= count.to_s %>-approve' src='<%= image_tag('approve-smaller') %>' onclick='approve("<%= count.to_s %>", 
                                                                                                     "<%= @reciever_mid %>", 
                                                                                                     "<%= req["aid"] %>", 
                                                                                                     "<%= req["sender_mid"] %>",
@@ -93,7 +93,7 @@
                             </div>
                     </div>
                     <div class='req-inner' onclick='deleteArrow("<%= count.to_s %>","<%= req["aid"] %>")'>
-                        <img class='col-xs-offset-5' src='/assets/delete_smaller.png'>
+                        <%= image_tag('Delete', :class => 'col-xs-offset-5') %>
                     </div>
                 </div>
                 <script>calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>", "user");</script>

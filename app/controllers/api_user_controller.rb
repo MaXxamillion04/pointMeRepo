@@ -280,7 +280,7 @@ class ApiUserController < ApplicationController
                     Rails.logger.error { "#{er.message} #{er.backtrace.join("\n")}" }
                     error = 14 # Twilio error bad phone number
                 ensure
-                    res = {:error => error} # no error
+                    res = {:error => error} 
                 end
             else
                 res = {:error => error}
