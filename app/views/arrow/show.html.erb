@@ -1,6 +1,7 @@
 <script src='/assets/spin.min.js'></script>
 <script src='/assets/jQueryRotate.js'></script>
-<div id='loading-div'><div id='location-error' class='container'></div></div>
+
+<div id='loading-div'><div id='location-error'></div></div>
 <div id='loading'></div>
 <div id='top-div' class='top-div'></div>
 
@@ -10,20 +11,20 @@
     </div>
 </div><div class='distance-div'>
     <div class='text-center'>
-        <img src='/assets/distance_icon' style='margin-top: -3%;'><h9 id='distance'></h9> <img src='/assets/time_icon' class='col-xs-offset-1' style='margin-top: -3%;'> <h9 id='hours'></h9>
+        <%= image_tag('distance_icon.png', :style => 'margin-top: -3%;')%><h9 id='distance'></h9> <%= image_tag('distance_icon.png', :style => 'margin-top: -3%;', :class => 'col-xs-offset-1')%> <h9 id='hours'></h9>
     </div>
 </div>
 <div id='arrow-div' class='arrow-div text-center'>
-    <img id='arrow' src='/assets/UP_ARROW_half.png'>
+    <%= image_tag('UP_ARROW_half.png', :id => 'arrow')%>
 </div>
 <div class='col-xs-6 footer-left-div text-center' onclick='redirect("arrows/<%= @current_user_id %>")'>
     <div class='inner-footer'>
-        <img src='/assets/x.png'>
+        <%= image_tag('x.png')%>
     </div>
 </div>
 <div id='right-footer' class='col-xs-6 footer-right-div text-center' onclick='toMap()'>
     <div class='inner-footer'>
-        <img id='right-footer-image' src='/assets/globe.png'>
+        <%= image_tag('globe.png', :id => 'right-footer-image') %>
     </div>
 </div>
 <script>
