@@ -96,7 +96,10 @@
                         <%= image_tag('delete_smaller.png', :class =>'col-xs-offset-5') %>
                     </div>
                 </div>
-                <script>calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>", "user");</script>
+                <script>
+                $( document ).ready(function() {
+                     calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>", "user");
+                });</script>
             <%
             count += 1
 
@@ -124,8 +127,9 @@
                     </div>
                 </div>
                 <script>
-                    calculateIndexDistance("<%= req["pid"] %>", "<%= count.to_s %>", "place");
-                </script>
+                $( document ).ready(function() {
+                     calculateIndexDistance("<%= req["pid"] %>", "<%= count.to_s %>", "place");
+                });</script>
             <%
             count += 1
             
