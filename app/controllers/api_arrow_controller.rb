@@ -57,11 +57,11 @@ class ApiArrowController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "select get_arrow(" + params[:sender] + "," + params[:receiver] + ");"
-            result = ActiveRecord::Base.connection.execute(sql)
-            
             sql = "select mid from member where phone=" + params[:receiver] + ";"
             reciever = ActiveRecord::Base.connection.execute(sql)
+            
+            sql = "select get_arrow(" + params[:sender] + "," + params[:receiver] + ");"
+            result = ActiveRecord::Base.connection.execute(sql)
             
             sql = "select full_name from member where phone=" + params[:sender] + ";"
             sender = ActiveRecord::Base.connection.execute(sql)
@@ -75,11 +75,16 @@ class ApiArrowController < ApplicationController
             Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
             error = 11 # rails server error
         ensure
-            # NOT WORKING old is never pre pended! 
             if(result.getvalue(0,0)[0..2] == "old")
                 error = 6 
             end
             if(error == 0)
+                # update reciever with name if they are a new user
+                if(reciever.ntuples == 0)
+                    sql = "UPDATE user SET full_name = '" + params[:full_name] + "' WHERE phone = " + params[:receiver] + ";"
+                    updateName = ActiveRecord::Base.connection.execute(sql)
+                end
+                
                 account_sid = Rails.application.secrets.twilio_account_sid 
                 auth_token = Rails .application.secrets.twilio_account_token
                 # set up a client to talk to the Twilio REST API 
