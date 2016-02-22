@@ -177,7 +177,7 @@ header {
     width: 100%;
     min-height: auto;
     text-align: center;
-    color: #fff;
+    color: #ffffff;
     background-image: image-url("park_2.jpg");
     background-position: center;
     -webkit-background-size: cover;
@@ -208,7 +208,7 @@ header .header-content .header-content-inner p {
     margin-bottom: 50px;
     font-size: 16px;
     font-weight: 300;
-    color: rgba(255,255,255,.7);
+    color: rgba(255,255,255, .9);
 }
 
 @media(min-width:768px) {
