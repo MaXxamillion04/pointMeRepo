@@ -178,7 +178,7 @@ header {
     min-height: auto;
     text-align: center;
     color: #fff;
-    background-image: image-url("/images/park_1.jpg");
+    background-image: url(../images/park_1.jpg);
     background-position: center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
