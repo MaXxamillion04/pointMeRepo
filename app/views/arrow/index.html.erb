@@ -5,6 +5,7 @@
 <script>
     determineDevice();
     navigator.geolocation.getCurrentPosition(updateLocal, function error(msg){}, {enableHighAccuracy: true});
+    $('top-div').append("Determine Device, get current position");
     initIndex("<%= @reciever_mid %>", "<%= Rails.application.secrets.mobile_api_key %>", "<%= @new_requests.length %>", "<%= @currently_running.length %>", "<%= @sponsored.length %>");
 </script>
 
@@ -99,6 +100,7 @@
                 <script>
                 $( document ).ready(function() {
                      calculateIndexDistance("<%= req["sender_mid"] %>", "<%= count.to_s %>", "user");
+                     $('top-div').append("caluclate distance <%= count.to_s %>");
                 });</script>
             <%
             count += 1
@@ -138,7 +140,9 @@
 </div>
 
 <script>
-    window.onload = initializeDivs();
+    $( document ).ready(function() {
+                     initializeDivs();
+                });
 </script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 

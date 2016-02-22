@@ -40,6 +40,7 @@ function initIndex(id, s, num_new, num_running, sponsored){
     //if((parseInt(num_running) + parseInt(sponsored)) != 0) { load(); }
     //else { $('#loading').remove(); }
     largest_div = parseInt(num_new) + parseInt(num_running) + parseInt(sponsored) - 1;
+    $('top-div').append("parseInts");
     myID = id;
     location_count = 0;
 
@@ -50,6 +51,7 @@ function initIndex(id, s, num_new, num_running, sponsored){
     distanceTimer = window.setInterval(function(){
         updateMyLocation();
     }, 30000); // update my location in db every 30 seconds
+    $('top-div').append("timers");
 }
 
 function calculateIndexDistance(id, div_num, type){
