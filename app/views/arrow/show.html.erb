@@ -2,15 +2,15 @@
  $( document ).ready(function() {
        initShow("<%= @friend_id %>", "<%= @current_user_id %>", "<%= Rails.application.secrets.mobile_api_key %>", "<%= @deathtime %>");
     });
-</script><
+</script>
 
-div id='loading-div'><div id='location-error'></div></div>
+<div id='loading-div'><div id='location-error'></div></div>
 <div id='loading'></div>
 <div id='top-div' class='top-div'></div>
 
 <div class='name-div'>
     <div class='text-center'>
-        <b><h8><%= @friend_name %></h8></b>
+        <b><h8><%= @friend_id %></h8></b>
     </div>
 </div><div class='distance-div'>
     <div class='text-center'>
