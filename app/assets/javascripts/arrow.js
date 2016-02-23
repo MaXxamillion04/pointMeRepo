@@ -466,7 +466,7 @@ function deleteArrow(div_num, aid){
 function showArrow(current_user_id, friend_name, friend_id, deathtime){
     var form = document.createElement("form");
     form.setAttribute("method", "post");
-    form.setAttribute("action", "/arrow/showArrow");
+    form.setAttribute("action", "http://www.archerapp.com/arrow/showArrow");
     
     var hiddenFieldfID = document.createElement("input");
     hiddenFieldfID.setAttribute("type", "hidden");
