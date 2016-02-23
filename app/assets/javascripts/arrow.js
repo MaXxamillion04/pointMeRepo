@@ -121,13 +121,6 @@ function initShow(fID, mID, s, dtime) {
     deathtime = dtime;
     updateHours();
     updateFriendLocation();
-    window.setTimeout(function(){
-        if(myLat == null){
-            $('#loading').dialog('close');
-            $('#location-error').attr('class', 'container location-error');
-            $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
-        }
-    }, 7000);
     window.addEventListener("deviceorientation", updateArrowAngle, true);
     distanceTimer = window.setInterval(function(){
         updateMyLocation();
@@ -466,7 +459,7 @@ function deleteArrow(div_num, aid){
 function showArrow(current_user_id, friend_name, friend_id, deathtime){
     var form = document.createElement("form");
     form.setAttribute("method", "post");
-    form.setAttribute("action", "http://www.archerapp.com/arrow/showArrow");
+    form.setAttribute("action", "/arrow/showArrow");
     
     var hiddenFieldfID = document.createElement("input");
     hiddenFieldfID.setAttribute("type", "hidden");
