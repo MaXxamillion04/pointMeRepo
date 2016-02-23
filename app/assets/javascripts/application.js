@@ -11,5 +11,13 @@
 // about supported directives.
 //
 //= require jquery_ujs
+//= require jquery
+//= require arrow
+//= require cbpAnimatedHeader
+//= require classie
+//= require creative
+//= require jquery.easing
+//= require jquery.fittext
+//= require wow
 //= require turbolinks
 //= require_tree .
