@@ -25,10 +25,12 @@
     </div>
 </div>
 
-<script src='/javascripts/jQueryRotate.js'></script>
+
 <script>
     initShow("<%= @friend_id %>", "<%= @current_user_id %>", "<%= Rails.application.secrets.mobile_api_key %>", "<%= @deathtime %>");
 </script>
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.secrets.google_maps_key %>">
 </script>
+<script src='/javascripts/jQueryRotate.js'></script>
+
