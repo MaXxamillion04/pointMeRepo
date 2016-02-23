@@ -305,7 +305,7 @@ function normaliseOrientation(event){
 }
 
 function redirect(url){
-    window.location = "http://pointme-hogueyy.c9users.io/" + url;
+    window.location = "/" + url;
 }
 
 function toMap(){
