@@ -4,7 +4,7 @@
 
 <div class='name-div'>
     <div class='text-center'>
-        <b><h8><%= @friend_name %></h8></b>
+        <b><h8><%= @friend_name @friend_id%></h8></b>
     </div>
 </div><div class='distance-div'>
     <div class='text-center'>
@@ -27,7 +27,7 @@
 
 <script>
  $( document ).ready(function() {
-       initShow("<%= @friend_id %>", "<%= @current_user_id %>", "<%= Rails.application.secrets.mobile_api_key %>", "<%= @deathtime %>");
+       initShow("3119298bc948f180", "dfcf22ed844eaab0", "<%= Rails.application.secrets.mobile_api_key %>", "2016-02-22T11:25:04");
     });
 </script>
 
