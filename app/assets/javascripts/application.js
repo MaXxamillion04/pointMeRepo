@@ -16,8 +16,8 @@
 //= require cbpAnimatedHeader
 //= require classie
 //= require creative
-//= require jquery.easing
+//= require jquery.easing.min
 //= require jquery.fittext
-//= require wow
+//= require wow.min
 //= require turbolinks
 //= require_tree .
