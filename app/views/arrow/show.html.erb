@@ -1,6 +1,3 @@
-<script src='/assets/spin.min.js'></script>
-<script src='/assets/jQueryRotate.js'></script>
-
 <div id='loading-div'><div id='location-error'></div></div>
 <div id='loading'></div>
 <div id='top-div' class='top-div'></div>
@@ -27,6 +24,8 @@
         <%= image_tag('globe.png', :id => 'right-footer-image') %>
     </div>
 </div>
+<script src='/assets/spin.min.js'></script>
+<script src='/javascripts/jQueryRotate.js'></script>
 <script>
     initShow("<%= @friend_id %>", "<%= @current_user_id %>", "<%= Rails.application.secrets.mobile_api_key %>", "<%= @deathtime %>");
 </script>
