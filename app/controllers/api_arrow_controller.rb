@@ -92,7 +92,7 @@ class ApiArrowController < ApplicationController
                 @client.account.messages.create({
                     :from => '+15123841298',  # the number of our twilio account
                     :to => params[:receiver], 
-                    :body => sender.getvalue(0,0) + ' has sent you a request on Archer! Click here, and follow the arrow to find this wonderful human: https://pointme-hogueyy.c9users.io/arrows/' + reciever.getvalue(0,0)
+                    :body => sender.getvalue(0,0) + ' has sent you a request on Archer! Click here, and follow the arrow to find this wonderful human: archerapp.com/arrows/' + reciever.getvalue(0,0)
                 })
                 res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)]}
             else
