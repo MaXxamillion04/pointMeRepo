@@ -1,6 +1,11 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
 
+<script>
+    $(document).ready(function(){
+        initWelcome();
+    });
+</script>
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -98,7 +103,7 @@
         <div class="container text-center">
             <div class="call-to-action">
                 <h2>Download our mobile app on iOS or Android!</h2>
-                <a href="#" class="btn btn-default btn-xl wow tada">Download</a>
+                <a id='download' href="#" class="btn btn-default btn-xl wow tada">Download</a>
             </div>
         </div>
     </aside>

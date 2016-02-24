@@ -19,9 +19,9 @@ class ApiArrowController < ApplicationController
             else
                 (0..arrs.ntuples()-1).each do |i| # do for each arrow object
                     temp = arrs[i]
-                    if(temp["accepted"] == "f") # if arrow has been rejected, delete from db
+                    if(temp["accepted"] == "f" || expired?(temp["deathtime"])) # if arrow has been rejected or is expired, delete from db
                         sql = "delete from arrow where aid='" + temp["aid"] + "' returning true;"
-                        execute = ActiveRecord::Base.connection.execute(sql)
+                        delete = ActiveRecord::Base.connection.execute(sql)
                     else
                         sender = temp["memberids"].sub('{', '')
                         sender = sender.sub('}', '').split(',')
@@ -179,5 +179,17 @@ class ApiArrowController < ApplicationController
             end
             
         end
-    end 
+    end
+    
+    def expired?(dtime)
+        deathtime = dtime[0..(temp["deathtime"].index('.') - 1)]
+        deathtime = deathtime.sub(' ', 'T')
+        hours_left = Time.strptime(temp["deathtime"][0..(temp["deathtime"].index('.') - 1)], time_format)
+        hours_left = ((hours_left - time_now) / 1.hour).round
+        if(hours_left < 0)
+            true
+        else
+            false
+        end
+    end    
 end

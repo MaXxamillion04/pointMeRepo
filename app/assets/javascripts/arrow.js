@@ -42,7 +42,11 @@ function initIndex(id, s, num_new, num_running, sponsored){
     largest_div = parseInt(num_new) + parseInt(num_running) + parseInt(sponsored) - 1;
     myID = id;
     location_count = 0;
-
+    var download_url = "/";
+    if(os == "iOS"){ download_url = "http://www.archerapp.com"; }
+    else if(os == "Android"){ download_url = "http://www.archerapp.com";}
+    $('#download').attr('href', download_url);
+    
     localTimer = window.setInterval(function(){
         navigator.geolocation.getCurrentPosition(updateLocal, function error(msg){}, {enableHighAccuracy: true});
     }, 3000); // update my location locally every 3 seconds
@@ -56,7 +60,7 @@ function calculateIndexDistance(id, div_num, type){
     if(myLat == null){
         navigator.geolocation.getCurrentPosition(updateLocal, function error(msg){}, {enableHighAccuracy: true});
         if(location_count >= 14 && div_num == "1"){
-            //$('#loading').dialog('close');
+            $('#loading').dialog('close');
             $('#location-error').attr('class', 'container location-error');
             $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
         }
@@ -180,7 +184,7 @@ function calculateDistance(){
    var dist;
     if(myLat == null){
         if(location_count >= 14){
-            //$('#loading').dialog('close');
+            $('#loading').dialog('close');
             $('#location-error').attr('class', 'container location-error');
             $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
         }
@@ -302,10 +306,6 @@ function normaliseOrientation(event){
         }
     }
     return alpha;
-}
-
-function redirect(url){
-    window.location = "/" + url;
 }
 
 function toMap(){
@@ -564,4 +564,14 @@ function showPlace(pid, user){
     
     document.body.appendChild(form);
     form.submit();
+}
+
+// ******************* Welcome Functions **************************
+
+function initWelcome(){
+    determineDevice();
+    var download_url = '/';
+    if(os == "iOS"){ download_url = "http://www.archerapp.com"; }
+    else if(os == "Android"){ download_url = "http://www.archerapp.com";}
+    $('#download').attr('href', download_url);
 }

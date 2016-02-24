@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   # arrow routes
-  resources :arrow
+  resources :arrow, :only => ["index", "show"]
   get '/arrows/:id' => 'arrow#index'
   post '/arrow/showArrow' => 'arrow#show'
   
@@ -15,19 +15,18 @@ Rails.application.routes.draw do
   # API routes
   
   scope :api do
-    resources :user, controller: :api_user
+    resources :user, controller: :api_user, :only => ["create", "show"]
     get 'user/getLocation/:id' => 'api_user#getLocation'
     put 'user/putLocation/:id' => 'api_user#putLocation'
     post 'user/auth' => 'api_user#authenticate'
     get 'user/confirm/:id' => 'api_user#confirm'
     get 'user/resend/:id' => 'api_user#resend'
     
-    resources :arrow, controller: :api_arrow
+    resources :arrow, controller: :api_arrow, :only => ["index", "create", "destroy"]
     get 'arrows/:id' => 'api_arrow#index'
     get 'arrow/accept/:id' => 'api_arrow#accept'
     get 'arrow/deny/:id' => 'api_arrow#deny'
     
-    resources :place, controller: :api_place
     get 'place/sponsored/:id' => 'api_place#sponsored'
     get 'place/getLocation/:id' => 'api_place#getLocation'
   end

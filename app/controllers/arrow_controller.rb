@@ -18,18 +18,18 @@ class ArrowController < ApplicationController
       deathtime = deathtime.sub(' ', 'T')
       hours_left = Time.strptime(temp["deathtime"][0..(temp["deathtime"].index('.') - 1)], time_format)
       hours_left = ((hours_left - time_now) / 1.hour).round
-      if (hours_left < 0)
-        hours_left = "(expired)"
+      if (hours_left < 0) # expired, delete from db
+        sql = "delete from arrow where aid='" + temp["aid"] + "' returning true;"
+        delete = ActiveRecord::Base.connection.execute(sql)
       else
         hours_left = hours_left.to_s + " hours"
+        req = {"aid" => temp["aid"], "sender_mid" => sender_mid, "sender_name" => temp["full_name"], "hours_left" => hours_left, "deathtime" => deathtime}
+        if (temp["accepted"] == nil)
+          @new_requests << req
+        elsif(temp["accepted"] == "t")
+          @currently_running << req
+        end 
       end
-      
-      req = {"aid" => temp["aid"], "sender_mid" => sender_mid, "sender_name" => temp["full_name"], "hours_left" => hours_left, "deathtime" => deathtime}
-      if (temp["accepted"] == nil)
-        @new_requests << req
-      elsif(temp["accepted"] == "t")
-        @currently_running << req
-      end  
     end
     
     @sponsored = Array.new
@@ -55,9 +55,5 @@ class ArrowController < ApplicationController
     @friend_name = params[:friend_name]
     @current_user_id = params[:current_user_id]
     @deathtime = params[:deathtime]
-  end
-
-  def delete
-    sql = "delete from arrow where aid='" + params[:id]
   end
 end

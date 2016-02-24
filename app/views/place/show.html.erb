@@ -15,7 +15,7 @@
 <div id='arrow-div' class='arrow-div text-center'>
     <%= image_tag('UP_ARROW_half.png', :id => 'arrow')%>
 </div>
-<div class='col-xs-6 footer-left-div text-center' onclick='redirect("arrows/<%= @current_user %>")'>
+<div class='col-xs-6 footer-left-div text-center' onclick='window.location = "/arrows/<%= @current_user_id %>";'>
     <div class='inner-footer'>
         <%= image_tag('x.png')%>
     </div>
