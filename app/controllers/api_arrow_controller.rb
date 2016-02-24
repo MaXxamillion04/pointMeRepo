@@ -79,12 +79,6 @@ class ApiArrowController < ApplicationController
                 error = 6 
             end
             if(error == 0)
-                # update reciever with name if they are a new user
-                if(reciever.ntuples == 0)
-                    sql = "UPDATE user SET full_name = '" + params[:full_name] + "' WHERE phone = " + params[:receiver] + ";"
-                    updateName = ActiveRecord::Base.connection.execute(sql)
-                end
-                
                 account_sid = Rails.application.secrets.twilio_account_sid 
                 auth_token = Rails .application.secrets.twilio_account_token
                 # set up a client to talk to the Twilio REST API 
@@ -182,10 +176,9 @@ class ApiArrowController < ApplicationController
     end
     
     def expired?(dtime)
-        deathtime = dtime[0..(temp["deathtime"].index('.') - 1)]
-        deathtime = deathtime.sub(' ', 'T')
-        hours_left = Time.strptime(temp["deathtime"][0..(temp["deathtime"].index('.') - 1)], time_format)
-        hours_left = ((hours_left - time_now) / 1.hour).round
+        time_format = '%Y-%m-%d %H:%M:%S'
+        hours_left = Time.strptime(dtime[0..(dtime.index('.') - 1)], time_format)
+        hours_left = ((hours_left - Time.now.utc) / 1.hour).round
         if(hours_left < 0)
             true
         else
