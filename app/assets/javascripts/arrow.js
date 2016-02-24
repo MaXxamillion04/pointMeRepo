@@ -433,7 +433,7 @@ function initializeDivs(){
     
     else if($('#sponsored-req-title').is(':empty')){
         $('#sponsored-req-title').attr('class', 'req-title');
-        $('#sponsored-req-title').append("<div class='req-inner'><h10 class='col-xs-offset-1'>SPONSORED</h10></div>");
+        $('#sponsored-req-title').append("<div class='req-inner'><h10 class='col-xs-offset-1'>SUGGESTED</h10></div>");
     }
 }
 
