@@ -458,8 +458,8 @@ function deleteArrow(div_num, aid){
     var num = div_num;
     if( choice == true ){
         mixpanel.track(
-            "ACCEPT",
-            {"Delete": "Web"}
+            "DELETE",
+            {"Device": "Web"}
         );
        $.ajax({
             url: "/api/arrow/" + aid + ".json?k=" + k,
