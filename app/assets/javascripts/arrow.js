@@ -311,7 +311,7 @@ function normaliseOrientation(event){
 function toMap(){
     mixpanel.track(
         "SWITCH MODE",
-        {"Device": "Web", "Mode" : "Map"}
+        {"Device Type": "Web", "Mode" : "Map"}
     );
     $('#right-footer-image').attr('src', '/images/arrow_icon.png');
     $('#arrow').remove();
@@ -324,7 +324,7 @@ function toMap(){
 function toArrow(){
     mixpanel.track(
         "SWITCH MODE",
-        {"Device": "Web", "Mode" : "Arrow"}
+        {"Device Type": "Web", "Mode" : "Arrow"}
     );
     window.clearInterval(mapTimer);
     map = null;
@@ -370,7 +370,7 @@ function initMap(){
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     mixpanel.track(
         "ACCEPT",
-        {"Device": "Web"}
+        {"Device Type": "Web"}
     );
     $.ajax({
         url: "/api/arrow/accept/" + aid + ".json?k=" + k ,
@@ -405,7 +405,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
 function deny(div_num, aid){
     mixpanel.track(
         "DENY",
-        {"Device": "Web"}
+        {"Device Type": "Web"}
     );
     $.ajax({
         url: "/api/arrow/deny/" + aid + ".json?k=" + k,
@@ -459,7 +459,7 @@ function deleteArrow(div_num, aid){
     if( choice == true ){
         mixpanel.track(
             "DELETE",
-            {"Device": "Web"}
+            {"Device Type": "Web"}
         );
        $.ajax({
             url: "/api/arrow/" + aid + ".json?k=" + k,
@@ -479,7 +479,7 @@ function deleteArrow(div_num, aid){
 function showArrow(current_user_id, friend_name, friend_id, deathtime){
     mixpanel.track(
         "OPEN",
-        {"Device": "Web", "Type" : "Person"}
+        {"Device Type": "Web", "Type" : "Person"}
     );
     var form = document.createElement("form");
     form.setAttribute("method", "post");
@@ -572,7 +572,7 @@ function initPlaceShow(location, dtime) {
 function showPlace(pid, user){
     mixpanel.track(
         "OPEN",
-        {"Device": "Web", "Type" : "Sponsored"}
+        {"Device Type": "Web", "Type" : "Sponsored"}
     );
     var form = document.createElement("form");
     form.setAttribute("method", "post");
