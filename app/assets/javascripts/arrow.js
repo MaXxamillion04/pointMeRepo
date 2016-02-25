@@ -345,8 +345,7 @@ function initMap(){
         center: bound.getCenter(),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         scrollwheel: true,
-        tilt: 0,
-        heading: 90
+        tilt: 0
       });
     map.fitBounds(bound);
     
@@ -358,7 +357,7 @@ function initMap(){
      myMarker = new google.maps.Marker({
         map: map,
         position: {lat: myLat, lng: myLon},
-        icon: '/assets/map_arrow.png'
+        icon: '/images/map_arrow.png'
     });
     
     mapTimer = window.setInterval(function(){
