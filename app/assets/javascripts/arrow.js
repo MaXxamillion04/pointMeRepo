@@ -61,8 +61,8 @@ function calculateIndexDistance(id, div_num, type){
         navigator.geolocation.getCurrentPosition(updateLocal, function error(msg){}, {enableHighAccuracy: true});
         if(location_count >= 14 && div_num == "1"){
             $('#loading').dialog('close');
-            $('#location-error').attr('class', 'container location-error');
-            $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
+            $('#loading-div').attr('class', 'container loading-div');
+            $('#loading-div').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
         }
         else{
             if(div_num == "1"){ location_count += 1; }
@@ -185,8 +185,8 @@ function calculateDistance(){
     if(myLat == null){
         if(location_count >= 14){
             $('#loading').dialog('close');
-            $('#location-error').attr('class', 'container location-error');
-            $('#location-error').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
+            $('#loading-div').attr('class', 'container loading-div');
+            $('#loading-div').append("Location error: please make sure location is enabled for this mobile browser and then refresh the page.");
         }
         else{
             location_count += 1;
