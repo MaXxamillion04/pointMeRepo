@@ -309,6 +309,10 @@ function normaliseOrientation(event){
 }
 
 function toMap(){
+    mixpanel.track(
+        "SWITCH MODE",
+        {"Device": "Web", "Mode" : "Map"}
+    );
     $('#right-footer-image').attr('src', '/images/arrow_icon.png');
     $('#arrow').remove();
     $('#arrow-div').append("<div id='map' class='map'></div>");
@@ -318,6 +322,10 @@ function toMap(){
 }
 
 function toArrow(){
+    mixpanel.track(
+        "SWITCH MODE",
+        {"Device": "Web", "Mode" : "Arrow"}
+    );
     window.clearInterval(mapTimer);
     map = null;
     myMarker = null;
@@ -360,6 +368,10 @@ function initMap(){
 }
 
 function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
+    mixpanel.track(
+        "ACCEPT",
+        {"Device": "Web"}
+    );
     $.ajax({
         url: "/api/arrow/accept/" + aid + ".json?k=" + k ,
         type: 'GET',
@@ -391,6 +403,10 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
 }
 
 function deny(div_num, aid){
+    mixpanel.track(
+        "DENY",
+        {"Device": "Web"}
+    );
     $.ajax({
         url: "/api/arrow/deny/" + aid + ".json?k=" + k,
         type: 'GET',
@@ -441,6 +457,10 @@ function deleteArrow(div_num, aid){
     var choice = confirm("Are you sure you want to delete this arrow forever?");
     var num = div_num;
     if( choice == true ){
+        mixpanel.track(
+            "ACCEPT",
+            {"Delete": "Web"}
+        );
        $.ajax({
             url: "/api/arrow/" + aid + ".json?k=" + k,
             type: 'DELETE',
@@ -457,6 +477,10 @@ function deleteArrow(div_num, aid){
 }
 
 function showArrow(current_user_id, friend_name, friend_id, deathtime){
+    mixpanel.track(
+        "OPEN",
+        {"Device": "Web", "Type" : "Person"}
+    );
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", "/arrow/showArrow");
@@ -546,6 +570,10 @@ function initPlaceShow(location, dtime) {
 }
 
 function showPlace(pid, user){
+    mixpanel.track(
+        "OPEN",
+        {"Device": "Web", "Type" : "Sponsored"}
+    );
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", "/place/showArrow");

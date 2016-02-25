@@ -14,16 +14,22 @@ class ArrowController < ApplicationController
       temp = result[i]
       sender_mid = temp["mid"]
       
+      sender_name = temp["full_name"]
+      if(sender_name.length() > 25)
+        sender_name = sender_name[0..23] + "-"
+      end
+      
       deathtime = temp["deathtime"][0..(temp["deathtime"].index('.') - 1)]
       deathtime = deathtime.sub(' ', 'T')
       hours_left = Time.strptime(temp["deathtime"][0..(temp["deathtime"].index('.') - 1)], time_format)
       hours_left = ((hours_left - time_now) / 1.hour).round
+      
       if (hours_left < 0) # expired, delete from db
         sql = "delete from arrow where aid='" + temp["aid"] + "' returning true;"
         delete = ActiveRecord::Base.connection.execute(sql)
       else
         hours_left = hours_left.to_s + " hours"
-        req = {"aid" => temp["aid"], "sender_mid" => sender_mid, "sender_name" => temp["full_name"], "hours_left" => hours_left, "deathtime" => deathtime}
+        req = {"aid" => temp["aid"], "sender_mid" => sender_mid, "sender_name" => sender_name, "hours_left" => hours_left, "deathtime" => deathtime}
         if (temp["accepted"] == nil)
           @new_requests << req
         elsif(temp["accepted"] == "t")
