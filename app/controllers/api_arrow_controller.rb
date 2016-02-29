@@ -10,7 +10,7 @@ class ApiArrowController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "select full_name, mid, location, aid, deathtime, memberids, accepted from arrow inner join member on ( member.mid = any( memberids::text[]) ) where mid != '" + params[:id] + "' and memberids @> '{" + params[:id] + "}'::text[] order by deathtime desc;"
+            sql = "select full_name, mid, location, aid, deathtime, memberids, accepted, receiver_name from arrow inner join member on ( member.mid = any( memberids::text[]) ) where mid != '" + params[:id] + "' and memberids @> '{" + params[:id] + "}'::text[] order by deathtime desc;"
             arrs = ActiveRecord::Base.connection.execute(sql)
             sql = "select place.pid, place.name, place.location, place.deathtime from place inner join member on ( place.location <@> member.location < 3 ) where member.mid='" + params[:id] + "' and place.sponsored=true;"
             pls = ActiveRecord::Base.connection.execute(sql)
@@ -27,6 +27,10 @@ class ApiArrowController < ApplicationController
                         sender = sender.sub('}', '').split(',')
                         sender = sender[0]
                         temp["memberids"] = sender
+                        if(temp["full_name"] == nil)
+                            temp["full_name"] = temp["receiver_name"] # use temporary contact name
+                        end
+                        temp.delete("receiver_name")
                         arrows << temp
                     end
                 end
@@ -79,6 +83,8 @@ class ApiArrowController < ApplicationController
                 error = 6 
             end
             if(error == 0)
+                sql = "update arrow set receiver_name='" + params[:contact_name] + "' where aid='" + result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)] + "';"
+                contact_name = ActiveRecord::Base.connection.execute(sql)
                 account_sid = Rails.application.secrets.twilio_account_sid 
                 auth_token = Rails .application.secrets.twilio_account_token
                 # set up a client to talk to the Twilio REST API 
