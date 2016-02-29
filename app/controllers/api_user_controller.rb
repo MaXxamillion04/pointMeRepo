@@ -71,6 +71,39 @@ class ApiUserController < ApplicationController
         end
     end
     
+    def postLocation
+        error = 0
+        result = ""
+        begin
+            if(params[:k] != Rails.application.secrets.mobile_api_key)
+                raise Exceptions::InvalidApiKey
+            end
+            if(params[:latitude] == nil || params[:longitude == nil])
+                error = 2 # no coordinates given error
+            else
+                sql = "update member set location='" + params[:latitude] + "," + params[:longitude] + "' where mid='" + params[:id] + "' returning true;"
+                result = ActiveRecord::Base.connection.execute(sql)
+            end
+            if(params[:format] != "json")
+                Rails.logger.error {"***UnknownFormat Exception was caught***"}
+                error = 12
+            end
+        rescue Exceptions::InvalidApiKey => invapi
+            error = 13 # invalid API key
+        rescue => e
+            Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+            error = 11 # rails server error
+        ensure
+            if(error == 0)
+                if(result.getvalue(0,0) == "f")
+                    error = 1 # mid does not exist in db
+                end
+            end    
+            res = {:error => error}
+            render :json => res.to_json
+        end
+    end
+    
     def authenticate
         error = 0
         begin

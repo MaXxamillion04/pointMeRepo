@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :user, controller: :api_user, :only => ["create", "show"]
     get 'user/getLocation/:id' => 'api_user#getLocation'
     put 'user/putLocation/:id' => 'api_user#putLocation'
+    post 'user/postLocation' => 'api_user#postLocation'
     post 'user/auth' => 'api_user#authenticate'
     get 'user/confirm/:id' => 'api_user#confirm'
     get 'user/resend/:id' => 'api_user#resend'
