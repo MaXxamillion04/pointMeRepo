@@ -61,11 +61,12 @@ class ApiArrowController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "select mid from member where phone=" + params[:receiver] + ";"
-            reciever = ActiveRecord::Base.connection.execute(sql)
-            
+
             sql = "select get_arrow(" + params[:sender] + "," + params[:receiver] + ");"
             result = ActiveRecord::Base.connection.execute(sql)
+            
+            sql = "select mid from member where phone=" + params[:receiver] + ";"
+            reciever = ActiveRecord::Base.connection.execute(sql)
             
             sql = "select full_name from member where phone=" + params[:sender] + ";"
             sender = ActiveRecord::Base.connection.execute(sql)
