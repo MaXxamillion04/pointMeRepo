@@ -3,9 +3,12 @@
 
 <script>
     $(document).ready(function(){
-        initWelcome();
+        initWelcome('<%= Rails.application.secrets.google_scripts_clientID %>', '<%= Rails.application.secrets.google_scriptID %>');
     });
 </script>
+<script src="https://apis.google.com/js/client.js?onload=checkAuth">
+</script>
+
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -48,7 +51,18 @@
                     <h1>Follow your arrow</h1>
                     <hr>
                     <p>Archer is the easiest way to find someone (or something) you know is nearby. Whether you're looking for a friend at the park, or a store at the mall, we'll lead you there.</p>
-                    <a href="#about" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
+                    <p class='col-md-5 col-lg-5 col-sm-5 col-xs-5'>Be the first to try the app:</p>
+                    <div class='col-md-7 col-lg-7 col-sm-7 col-xs-7'>
+                      <div class="form-group register-form">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email address..."><br>
+                        <div class="text-center">
+                      <label class="radio-inline"><input type="radio" name="iOS_select" id="iOS_select">iOS</label>
+                      <label class="radio-inline"><input type="radio" name="android_select" id="android_select">Android</label>
+                      </div>
+                      <br>
+                      <button type="submit" class="btn btn-primary btn-block" onclick='addEmail()'>Register</button>
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,7 +118,7 @@
             <div class="container text-center">
                 <div class="call-to-action">
                     <h2>Download our mobile app on iOS or Android!</h2>
-                    <a id='download' href="#" class="btn btn-default btn-xl wow tada">Download</a>
+                    <a id='download' href="#" class="btn btn-default btn-xl wow tada page-scroll">Download</a>
                 </div>
             </div>
         </aside>

@@ -594,11 +594,73 @@ function showPlace(pid, user){
 }
 
 // ******************* Welcome Functions **************************
+var CLIENT_ID;
+var scriptId;
 
-function initWelcome(){
-    determineDevice();
+function initWelcome(client_id, script_id){
+    CLIENT_ID = client_id;
+    scriptId = script_id;
+    /* determineDevice();
     var download_url = '/';
     if(os == "iOS"){ download_url = "http://www.archerapp.com"; }
     else if(os == "Android"){ download_url = "http://www.archerapp.com";}
-    $('#download').attr('href', download_url);
+    $('#download').attr('href', download_url); */
 }
+
+function addEmail(){
+       if(!($('#iOS_select').is(':checked')) && !($('#android_select').is(':checked'))){ window.alert("Please select a phone type");}
+       else if($('#iOS_select').is(':checked') && $('#android_select').is(':checked')){ window.alert("Please select only one phone type"); location.reload();}
+       else if($('#email').val() == ""){ window.alert("Please enter an email address"); }
+       else{
+            var phone_type;
+            if($('#android_select').is(':checked')){ phone_type = "Android"; }
+            else { phone_type = "iOS"; }
+            var email = $('#email').val();
+    
+            // Create an execution request object.
+            var request = {
+                'function': 'addEmail',
+                'parameters': [email, phone_type]
+                };
+    
+            // Make the API request.
+            var op = gapi.client.request({
+                'root': 'https://script.googleapis.com',
+                'path': 'v1/scripts/' + scriptId + ':run',
+                'method': 'POST',
+                'body': request
+            });
+            op.execute();
+            window.alert("Success! We'll send you an email with the app download in the next 24 hours");
+            location.reload();
+        }
+    }
+    
+    function checkAuth() {
+        var SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+        gapi.auth.authorize(
+          {
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+          }, handleAuthResult);
+      }
+      
+      function handleAuthResult(authResult) {
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+          // Hide auth UI, then load client library.
+          authorizeDiv.style.display = 'none';
+        } else {
+          // Show auth UI, allowing the user to initiate authorization by
+          // clicking authorize button.
+          authorizeDiv.style.display = 'inline';
+        }
+      }
+      
+      function handleAuthClick(event) {
+        gapi.auth.authorize(
+          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          handleAuthResult);
+        return false;
+      }

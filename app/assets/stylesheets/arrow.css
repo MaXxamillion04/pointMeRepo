@@ -4,6 +4,10 @@ html, body {
     width: 100%;
 }
 
+.register-form{
+    text-align: left;
+}
+
 .loading-div{
     height: 8%;
     width: 100%;
