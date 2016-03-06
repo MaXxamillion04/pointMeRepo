@@ -122,8 +122,8 @@ function initShow(fID, mID, s, dtime) {
     load();
     friendID = fID;
     myID = mID;
-    deathtime = dtime;
-    updateHours();
+    //deathtime = dtime;
+    //updateHours();
     updateFriendLocation();
     window.addEventListener("deviceorientation", updateArrowAngle, true);
     distanceTimer = window.setInterval(function(){
@@ -132,7 +132,7 @@ function initShow(fID, mID, s, dtime) {
     }, 3000);
     
     hourTimer = window.setInterval(function(){
-        updateHours();
+        //updateHours();
     }, 120000);
 }
 
