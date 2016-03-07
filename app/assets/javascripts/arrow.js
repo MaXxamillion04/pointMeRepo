@@ -627,7 +627,6 @@ function addEmail(){
                 data: {email: email, phone_type: phone_type},
                 error: function(result){
                     console.log("AJAX error");
-                   window.alert("ERROR");
                 }
             });
             /* // Create an execution request object.
