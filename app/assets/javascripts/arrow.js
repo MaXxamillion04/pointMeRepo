@@ -622,7 +622,7 @@ function addEmail(){
             
             // http://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec
             $.ajax({
-                url: "http://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec",
+                url: "https://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec",
                 type: 'POST',
                 data: {email: email, phone_type: phone_type},
                 error: function(result){
