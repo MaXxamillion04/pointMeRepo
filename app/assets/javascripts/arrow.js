@@ -298,8 +298,8 @@ function normaliseOrientation(event){
     else if(os == "Android"){
         if(browser == "Chrome"){
             alpha = 360 - alpha;
-            alpha -= 90;
-            if(alpha < 0){ alpha += 360; }
+            /*alpha -= 90;
+            if(alpha < 0){ alpha += 360; } */
         }
         else if(browser == "Stock"){
             alpha = 360 - alpha;
