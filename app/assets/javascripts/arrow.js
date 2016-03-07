@@ -608,6 +608,7 @@ function initWelcome(client_id, script_id){
 }
 
 function addEmail(){
+       checkAuth();
        if(!($('#iOS_select').is(':checked')) && !($('#android_select').is(':checked'))){ window.alert("Please select a phone type");}
        else if($('#iOS_select').is(':checked') && $('#android_select').is(':checked')){ window.alert("Please select only one phone type"); location.reload();}
        else if($('#email').val() == ""){ window.alert("Please enter an email address"); }
