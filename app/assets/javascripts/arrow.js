@@ -298,6 +298,8 @@ function normaliseOrientation(event){
     else if(os == "Android"){
         if(browser == "Chrome"){
             alpha = 360 - alpha;
+            alpha -= 90;
+            if(alpha < 0){ alpha += 360; }
         }
         else if(browser == "Stock"){
             alpha = 360 - alpha;
@@ -617,8 +619,18 @@ function addEmail(){
             if($('#android_select').is(':checked')){ phone_type = "Android"; }
             else { phone_type = "iOS"; }
             var email = $('#email').val();
-    
-            // Create an execution request object.
+            
+            // http://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec
+            $.ajax({
+                url: "http://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec",
+                type: 'POST',
+                data: {email: email, phone_type: phone_type},
+                error: function(result){
+                    console.log("AJAX error");
+                   window.alert("ERROR");
+                }
+            });
+            /* // Create an execution request object.
             var request = {
                 'function': 'addEmail',
                 'parameters': [email, phone_type]
@@ -631,7 +643,7 @@ function addEmail(){
                 'method': 'POST',
                 'body': request
             });
-            op.execute();
+            op.execute(); */
             window.alert("Success! We'll send you an email with the app download in the next 24 hours");
             location.reload();
         }
