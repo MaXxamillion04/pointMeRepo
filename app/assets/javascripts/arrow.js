@@ -357,7 +357,7 @@ function initMap(){
      myMarker = new google.maps.Marker({
         map: map,
         position: {lat: myLat, lng: myLon},
-        icon: '/images/map_arrow.png'
+        icon: '/images/YOU.png'
     });
     
     mapTimer = window.setInterval(function(){

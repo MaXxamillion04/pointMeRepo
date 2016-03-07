@@ -40,7 +40,7 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-
+    
     <header>
         <div class="header-content">
             <div class="header-content-inner">
@@ -138,6 +138,15 @@
             </div>
         </div>
     </section>
+    
+    <div id="authorize-div" style="display: none">
+      <span>Authorize access to Google Apps Script Execution API</span>
+      <!--Button for the user to click to initiate auth sequence -->
+      <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+    </div>
+    <pre id="output"></pre>
     
 <script src='/javascripts/cbpAnimatedHeader.js'></script>
 <script src='/javascripts/jquery.easing.min.js'></script>
