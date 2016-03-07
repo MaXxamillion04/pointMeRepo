@@ -50,7 +50,7 @@ class ApiArrowController < ApplicationController
             Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
             error = 11 # rails server error
         ensure
-            res = {:error => error, :arrows => arrows, :places => places, :api => Rails.application.secrets.mobile_api_key}
+            res = {:error => error, :arrows => arrows, :places => places}
             render :json => res.to_json
         end
     end
