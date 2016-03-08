@@ -266,8 +266,6 @@ function determineDevice(){
         browser = "Unknown";
         os = "Unknown";
     }
-    if(os == "iOS"){ http = "http"; }
-    else{ http = "https"; }
 }
 
 // using formula here: http://www.movable-type.co.uk/scripts/latlong.html
@@ -602,15 +600,16 @@ var scriptId;
 function initWelcome(client_id, script_id){
     CLIENT_ID = client_id;
     scriptId = script_id;
-    /* determineDevice();
-    var download_url = '/';
-    if(os == "iOS"){ download_url = "http://www.archerapp.com"; }
-    else if(os == "Android"){ download_url = "http://www.archerapp.com";}
-    $('#download').attr('href', download_url); */
+    /*determineDevice();
+    if(/OS 6_/.test(navigator.userAgent)){ 
+        $('#singup').empty(); 
+        $('#singup').append("<p>Be the first to try the app</p><a id='download' href='https://docs.google.com/forms/d/1Q4SHxFODrPuBv5NFiiC71sf83tEqEUgTVBBgbR1NPiM/viewform' class='btn btn-primary'>Sign Up</a>");     
+    } */
+    
 }
 
 function addEmail(){
-       checkAuth();
+       //checkAuth();
        if(!($('#iOS_select').is(':checked')) && !($('#android_select').is(':checked'))){ window.alert("Please select a phone type");}
        else if($('#iOS_select').is(':checked') && $('#android_select').is(':checked')){ window.alert("Please select only one phone type"); location.reload();}
        else if($('#email').val() == ""){ window.alert("Please enter an email address"); }
@@ -620,11 +619,13 @@ function addEmail(){
             else { phone_type = "iOS"; }
             var email = $('#email').val();
             
+            //if(/OS 6_/.test(navigator.userAgent)){$.ajaxSetup({cache: false});}
             // http://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec",
+                url: "http://script.google.com/macros/s/AKfycbzCXeP7faApVM_Vqm_Nqza60zIwFMSrzHEN-FwMzz4_UFWOo5s/exec",
                 type: 'POST',
-                data: {email: email, phone_type: phone_type},
+                cache: false,
+                data: {email: email, phone_type: phone_type, random: new Date().getTime()},
                 error: function(result){
                     console.log("AJAX error");
                 }
