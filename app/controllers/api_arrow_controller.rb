@@ -86,8 +86,11 @@ class ApiArrowController < ApplicationController
             if(error == 0)
                 sql = "update arrow set receiver_name='" + params[:contact_name] + "' where aid='" + result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)] + "';"
                 contact_name = ActiveRecord::Base.connection.execute(sql)
-                
-                # if(receiver.getvalue() == "0")
+                if(receiver.getvalue(0,1) == "0")
+                    url = "archerapp.com/arrows/" + reciever.getvalue(0,0)
+                else
+                    url = "archer://archerapp.com"
+                end
                 account_sid = Rails.application.secrets.twilio_account_sid 
                 auth_token = Rails .application.secrets.twilio_account_token
                 # set up a client to talk to the Twilio REST API 
@@ -95,7 +98,7 @@ class ApiArrowController < ApplicationController
                 @client.account.messages.create({
                     :from => '+15123841298',  # the number of our twilio account
                     :to => params[:receiver], 
-                    :body => sender.getvalue(0,0) + ' has sent you a request on Archer! If you have the mobile app, click here: archer://archerapp.com %0aOtherwise, click here: archerapp.com/arrows/' + reciever.getvalue(0,0)
+                    :body => sender.getvalue(0,0) + " has sent you a request on Archer! Click here, and follow the arrow to find them: " + url
                 })
                 res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)]}
             else
