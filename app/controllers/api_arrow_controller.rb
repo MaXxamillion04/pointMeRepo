@@ -86,7 +86,7 @@ class ApiArrowController < ApplicationController
             if(error == 0)
                 sql = "update arrow set receiver_name='" + params[:contact_name] + "' where aid='" + result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)] + "';"
                 contact_name = ActiveRecord::Base.connection.execute(sql)
-                if(receiver.getvalue(0,1) == "0")
+                if(reciever.getvalue(0,1) == "0")
                     url = "archerapp.com/arrows/" + reciever.getvalue(0,0)
                 else
                     url = "archer://archerapp.com"
