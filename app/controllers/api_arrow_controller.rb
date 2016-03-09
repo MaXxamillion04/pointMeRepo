@@ -27,7 +27,7 @@ class ApiArrowController < ApplicationController
                         sender = sender.sub('}', '').split(',')
                         sender = sender[0]
                         temp["memberids"] = sender
-                        if(temp["full_name"] == nil)
+                        if(temp["full_name"] == "0")
                             temp["full_name"] = temp["receiver_name"] # use temporary contact name
                         end
                         temp.delete("receiver_name")
