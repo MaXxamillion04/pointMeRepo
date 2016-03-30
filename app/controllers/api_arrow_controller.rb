@@ -1,7 +1,5 @@
 class ApiArrowController < ApplicationController
-    require 'twilio-ruby'
     require 'exceptions'
-    require 'gcm'
     
     def index
         error = 0
@@ -93,13 +91,7 @@ class ApiArrowController < ApplicationController
                     
                 else # the user HAS the mobile app. send them a push notification
                     message = sender.getvalue(0,0) + " sent you an arrow!"
-                    gcm = GCM.new("AIzaSyCJvlm8JdsORDPe_xD6zyxYIMR8sgTNMLE")
-                    registration_ids= [reciever.getvalue(0,2)] # an array of one or more client registration tokens
-                    options = {data: {message: message}}
-                    response = gcm.send(registration_ids, options)
-                    puts response[:status]
-                    puts ""
-                    puts response[:body]
+                    notify(reciever.getvalue(0,2), message)
                 end
                 
                 res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)]}
@@ -198,17 +190,5 @@ class ApiArrowController < ApplicationController
         else
             false
         end
-    end
-    
-    def send_text(to, message)
-        account_sid = Rails.application.secrets.twilio_account_sid 
-        auth_token = Rails .application.secrets.twilio_account_token
-        # set up a client to talk to the Twilio REST API 
-        @client = Twilio::REST::Client.new account_sid, auth_token 
-        @client.account.messages.create({
-            :from => '+15123841298',  # the number of our twilio account
-            :to => to, 
-            :body => message
-        })
     end
 end

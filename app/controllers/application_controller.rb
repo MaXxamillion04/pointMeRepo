@@ -2,28 +2,28 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
+  require 'twilio-ruby'
+  require 'gcm'
   
-  def notify_ios(token, message)
-      n = Rpush::Apns::Notification.new
-      n.app = Rpush::Apns::App.find_by_name("ios_app")
-      n.device_token = token # 64-character hex string
-      n.alert = message
-      n.data = {}
-      n.save!
+  def notify(token, message)
+    gcm = GCM.new(Rails.application.secrets.gcm_push_key)
+    registration_ids= [reciever.getvalue(0,2)] # an array of one or more client registration tokens
+    options = {data: {message: message}, content_available: true}
+    response = gcm.send(registration_ids, options)
+    puts response[:status]
+    puts ""
+    puts response[:body] 
   end
-    
-    def notify_android(token, message, title)
-        n = Rpush::Gcm::Notification.new
-        n.app = Rpush::Gcm::App.find_by_name("android_app")
-        n.registration_ids = [token]
-        n.data = { message: message }
-        n.priority = 'high'        # Optional, can be either 'normal' or 'high'
-        n.content_available = true # Optional
-        # Optional notification payload. See the reference below for more keys you can use!
-        n.notification = {
-                           title: title,
-                           icon: 'myicon'
-                         }
-        n.save!
-    end
+  
+  def send_text(to, message)
+    account_sid = Rails.application.secrets.twilio_account_sid 
+    auth_token = Rails .application.secrets.twilio_account_token
+    # set up a client to talk to the Twilio REST API 
+    @client = Twilio::REST::Client.new account_sid, auth_token 
+    @client.account.messages.create({
+        :from => '+15123841298',  # the number of our twilio account
+        :to => to, 
+        :body => message
+    })
+  end
 end
