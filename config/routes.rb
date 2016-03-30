@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     post 'user/auth' => 'api_user#authenticate'
     get 'user/confirm/:id' => 'api_user#confirm'
     get 'user/resend/:id' => 'api_user#resend'
+    post 'user/notify' => 'api_user#notify'
+    post 'user/store_token' => 'api_user#store_token'
     
     resources :arrow, controller: :api_arrow, :only => ["index", "create", "destroy"]
     get 'arrows/:id' => 'api_arrow#index'

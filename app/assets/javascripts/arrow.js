@@ -8,6 +8,9 @@ var localTimer;
 var myID;
 var k;
 var location_count;
+var myAccuracy;
+var myTime;
+
 var opts = {
   lines: 11 // The number of lines to draw
 , length: 10 // The length of each line
@@ -54,6 +57,45 @@ function initIndex(id, s, num_new, num_running, sponsored){
     distanceTimer = window.setInterval(function(){
         updateMyLocation();
     }, 30000); // update my location in db every 30 seconds
+}
+
+function isBetterLocation(best_lat, best_lon, best_accuracy, best_time, new_lat, new_lon, new_accuracy){
+    if(best_lat == null){ return true; }
+    
+    // Check whether the new location fix is newer or older
+    var TWO_MINUTES = 60000;
+    var new_time = new Date();
+    var timeDelta = new_time - best_time;
+    var isSignificantlyNewer = timeDelta > TWO_MINUTES;
+    var isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+    var isNewer = timeDelta > 0;
+    
+    // Check whether the new location fix is more or less accurate
+    var accuracyDelta = new_accuracy - best_accuracy;
+    var isLessAccurate = accuracyDelta > 0;
+    var isMoreAccurate = accuracyDelta < 0;
+    var isSignificantlyLessAccurate = accuracyDelta > 5;
+    var isAccurate = location.getAccuracy() < 8;
+    
+    //if it's accurate and not old, use it
+    if (isAccurate && !isSignificantlyOlder) return true;
+
+    //if it's a lot newer, use it
+    if (isSignificantlyNewer) return true;
+
+    //if new reading is more accurate and isn't old, use it     ????
+    if (isMoreAccurate && !isSignificantlyOlder) return true;
+
+    if (isNewer && isAccurate) return true;
+
+   // If the new location is older and less accurate, it must be worse
+    if (isSignificantlyOlder && isSignificantlyLessAccurate) return false;
+
+    // Determine location quality using a combination of timeliness and accuracy
+    if (isNewer && !isLessAccurate)  return true;
+    else if (isNewer && !isSignificantlyLessAccurate) return true;
+
+    return false;
 }
 
 function calculateIndexDistance(id, div_num, type){
@@ -153,8 +195,16 @@ function updateHours(){
 }
 
 function updateLocal(position) {
-    myLat = position.coords.latitude; 
-    myLon = position.coords.longitude;
+    var new_lat = position.coords.latitude; 
+    var new_lon = position.coords.longitude;
+    var new_time = new Date();
+    var new_accuracy = position.coords.accuracy;
+    if(isBetterLocation(myLat, myLon, myAccuracy, myTime, new_lat, new_lon, new_accuracy)){ // if the new location is better, update my lcoation locally
+        myLat = new_lat; 
+        myLon = new_lon;
+        myTime = new_time;
+        myAccuracy = new_accuracy;
+    }
 }
 
 function updateMyLocation(){
@@ -630,6 +680,7 @@ function addEmail(){
                     console.log("AJAX error");
                 }
             });
+            
             /* // Create an execution request object.
             var request = {
                 'function': 'addEmail',
@@ -644,6 +695,9 @@ function addEmail(){
                 'body': request
             });
             op.execute(); */
+            if(phone_type == 'iOS'){
+                window.alert('Whoops! ')
+            }
             window.alert("Success! We'll send you an email with the app download in the next 24 hours");
             location.reload();
         }

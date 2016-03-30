@@ -37,6 +37,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'puma'
 gem 'pg'
 gem 'twilio-ruby'
+#gem 'rpush'
+gem 'gcm'
 
 
 group :development, :test do

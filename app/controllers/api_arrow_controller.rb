@@ -1,6 +1,7 @@
 class ApiArrowController < ApplicationController
     require 'twilio-ruby'
     require 'exceptions'
+    require 'gcm'
     
     def index
         error = 0
@@ -65,7 +66,7 @@ class ApiArrowController < ApplicationController
             sql = "select get_arrow(" + params[:sender] + "," + params[:receiver] + ");"
             result = ActiveRecord::Base.connection.execute(sql)
             
-            sql = "select mid,full_name from member where phone=" + params[:receiver] + ";"
+            sql = "select mid,full_name,device_token from member where phone=" + params[:receiver] + ";"
             reciever = ActiveRecord::Base.connection.execute(sql)
             
             sql = "select full_name from member where phone=" + params[:sender] + ";"
@@ -86,20 +87,21 @@ class ApiArrowController < ApplicationController
             if(error == 0)
                 sql = "update arrow set receiver_name='" + params[:contact_name] + "' where aid='" + result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)] + "';"
                 contact_name = ActiveRecord::Base.connection.execute(sql)
-                if(reciever.getvalue(0,1) == "0")
-                    url = "archerapp.com/arrows/" + reciever.getvalue(0,0)
-                else
-                    url = "archer://archerapp.com"
+                if(reciever.getvalue(0,1) == "0") # the user does NOT have the mobile app. send them a text
+                    message = sender.getvalue(0,0) + " sent you a request on Archer! Click here, and follow the arrow to find them: archerapp.com/arrows/" + reciever.getvalue(0,0)
+                    send_text(params[:receiver], message)
+                    
+                else # the user HAS the mobile app. send them a push notification
+                    message = sender.getvalue(0,0) + " sent you an arrow!"
+                    gcm = GCM.new("AIzaSyCJvlm8JdsORDPe_xD6zyxYIMR8sgTNMLE")
+                    registration_ids= [reciever.getvalue(0,2)] # an array of one or more client registration tokens
+                    options = {data: {message: message}}
+                    response = gcm.send(registration_ids, options)
+                    puts response[:status]
+                    puts ""
+                    puts response[:body]
                 end
-                account_sid = Rails.application.secrets.twilio_account_sid 
-                auth_token = Rails .application.secrets.twilio_account_token
-                # set up a client to talk to the Twilio REST API 
-                @client = Twilio::REST::Client.new account_sid, auth_token 
-                @client.account.messages.create({
-                    :from => '+15123841298',  # the number of our twilio account
-                    :to => params[:receiver], 
-                    :body => sender.getvalue(0,0) + " has sent you a request on Archer! Click here, and follow the arrow to find them: " + url
-                })
+                
                 res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)]}
             else
                 res = {:error => error}
@@ -196,5 +198,17 @@ class ApiArrowController < ApplicationController
         else
             false
         end
-    end    
+    end
+    
+    def send_text(to, message)
+        account_sid = Rails.application.secrets.twilio_account_sid 
+        auth_token = Rails .application.secrets.twilio_account_token
+        # set up a client to talk to the Twilio REST API 
+        @client = Twilio::REST::Client.new account_sid, auth_token 
+        @client.account.messages.create({
+            :from => '+15123841298',  # the number of our twilio account
+            :to => to, 
+            :body => message
+        })
+    end
 end
