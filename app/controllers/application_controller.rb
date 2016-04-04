@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   def notify(token, message)
     gcm = GCM.new(Rails.application.secrets.gcm_push_key)
     registration_ids= [reciever.getvalue(0,2)] # an array of one or more client registration tokens
-    options = {data: {message: message}, content_available: true}
+    options = {data: {message: message}, content_available: true, priority: 'high'}
     response = gcm.send(registration_ids, options)
     puts response[:status]
     puts ""
