@@ -85,16 +85,17 @@ class ApiArrowController < ApplicationController
             if(error == 0)
                 sql = "update arrow set receiver_name='" + params[:contact_name] + "' where aid='" + result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)] + "';"
                 contact_name = ActiveRecord::Base.connection.execute(sql)
-                if(reciever.getvalue(0,1) == "0") # the user does NOT have the mobile app. send them a text
+                if(reciever.getvalue(0,1) == "0") # the user does NOT have the mobile app. arrow sender must send them a text
                     message = sender.getvalue(0,0) + " sent you a request on Archer! Click here, and follow the arrow to find them: archerapp.com/arrows/" + reciever.getvalue(0,0)
-                    send_text(params[:receiver], message)
+                    # send_text(params[:receiver], message)
                     
-                else # the user HAS the mobile app. send them a push notification
+                else # the user HAS the mobile app. server must send them a push notification
                     message = sender.getvalue(0,0) + " sent you an arrow!"
                     notify(reciever.getvalue(0,2), message)
+                    message = ""
                 end
                 
-                res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)]}
+                res = {:error => error, :aid => result.getvalue(0,0)[3..(result.getvalue(0,0).length - 1)], :message => message}
             else
                 res = {:error => error}
             end
@@ -108,8 +109,10 @@ class ApiArrowController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "update arrow set accepted=true where aid='" + params[:id] + "' returning true;"
+            sql = "update arrow set accepted=true where aid='" + params[:aid] + "' returning true;"
             result = ActiveRecord::Base.connection.execute(sql)
+            sql = "select full_name,device_token from member where mid='" + params[:sender_mid] + "';"
+            user = ActiveRecord::Base.connection.execute(sql)
             if(params[:format] != "json")
                 Rails.logger.error {"***UnknownFormat Exception was caught***"}
                 error = 12
@@ -120,7 +123,11 @@ class ApiArrowController < ApplicationController
             Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
             error = 11 # rails server error
         ensure
-            res = {:error => error, :aid => params[:id]}
+            if(error == 0)
+                message = result.getvalue(0,0) + " accepted your arrow!"
+                notify(result.getvalue(0,1), message)
+            end
+            res = {:error => error, :aid => params[:aid]}
             render :json => res.to_json
         end
     end
@@ -131,8 +138,10 @@ class ApiArrowController < ApplicationController
             if(params[:k] != Rails.application.secrets.mobile_api_key)
                 raise Exceptions::InvalidApiKey
             end
-            sql = "update arrow set accepted=false where aid='" + params[:id] + "' returning true;"
+            sql = "update arrow set accepted=false where aid='" + params[:aid] + "' returning true;"
             result = ActiveRecord::Base.connection.execute(sql)
+            sql = "select full_name,device_token from member where mid='" + params[:sender_mid] + "';"
+            user = ActiveRecord::Base.connection.execute(sql)
             if(params[:format] != "json")
                 Rails.logger.error {"***UnknownFormat Exception was caught***"}
                 error = 12
@@ -143,7 +152,11 @@ class ApiArrowController < ApplicationController
             Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
             error = 11 # rails server error
         ensure
-            res = {:error => error, :aid => params[:id]}
+            if(error == 0)
+                message = result.getvalue(0,0) + " did not accept your arrow."
+                notify(result.getvalue(0,1), message)
+            end
+            res = {:error => error, :aid => params[:aid]}
             render :json => res.to_json
         end
     end

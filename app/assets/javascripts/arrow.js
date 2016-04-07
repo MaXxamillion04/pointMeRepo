@@ -422,8 +422,9 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
         {"Device Type": "Web"}
     );
     $.ajax({
-        url: "/api/arrow/accept/" + aid + ".json?k=" + k ,
-        type: 'GET',
+        url: "/api/arrow/accept.json?k=" + k ,
+        type: 'POST',
+        data: {aid: aid, sender_mid: sender_mid},
         success: function(result) {
             var num = div_num;
             div_num = '#' + div_num;
@@ -451,14 +452,15 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     
 }
 
-function deny(div_num, aid){
+function deny(div_num, aid, sender_mid){
     mixpanel.track(
         "DENY",
         {"Device Type": "Web"}
     );
     $.ajax({
-        url: "/api/arrow/deny/" + aid + ".json?k=" + k,
+        url: "/api/arrow/deny.json?k=" + k,
         type: 'GET',
+        data: {aid: aid, sender_mid: sender_mid},
         success: function(result) {
             div_num = '#' + div_num;
             $(div_num + '-outer').remove();

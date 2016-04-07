@@ -27,8 +27,8 @@ Rails.application.routes.draw do
     
     resources :arrow, controller: :api_arrow, :only => ["index", "create", "destroy"]
     get 'arrows/:id' => 'api_arrow#index'
-    get 'arrow/accept/:id' => 'api_arrow#accept'
-    get 'arrow/deny/:id' => 'api_arrow#deny'
+    post 'arrow/accept' => 'api_arrow#accept'
+    post 'arrow/deny' => 'api_arrow#deny'
     
     get 'place/sponsored/:id' => 'api_place#sponsored'
     get 'place/getLocation/:id' => 'api_place#getLocation'

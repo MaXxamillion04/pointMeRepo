@@ -322,16 +322,6 @@ class ApiUserController < ApplicationController
         end
     end
     
-    def notify
-        sql = "select device_token from member where mid='" + params[:mid] + "';"
-        token = ActiveRecord::Base.connection.execute(sql)
-        if(params[:type] == 'ios')
-            notify_ios(params[:message], token)
-        elsif(params[:type] == 'android')
-            notify_ios(params[:message], token, params[:title])
-        end
-    end
-    
     def store_token
         sql = "update member set device_token='" + params[:device_token] + "' where mid='" + params[:mid] + "';"
         token = ActiveRecord::Base.connection.execute(sql)
