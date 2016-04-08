@@ -1,0 +1,2 @@
+class RpushController < ApplicationController
+end

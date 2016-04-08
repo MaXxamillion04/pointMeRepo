@@ -124,8 +124,8 @@ class ApiArrowController < ApplicationController
             error = 11 # rails server error
         ensure
             if(error == 0)
-                message = result.getvalue(0,0) + " accepted your arrow!"
-                notify(result.getvalue(0,1), message)
+                message = user.getvalue(0,0) + " accepted your arrow!"
+                notify(user.getvalue(0,1), message)
             end
             res = {:error => error, :aid => params[:aid]}
             render :json => res.to_json
@@ -153,8 +153,8 @@ class ApiArrowController < ApplicationController
             error = 11 # rails server error
         ensure
             if(error == 0)
-                message = result.getvalue(0,0) + " did not accept your arrow."
-                notify(result.getvalue(0,1), message)
+                message = user.getvalue(0,0) + " did not accept your arrow."
+                notify(user.getvalue(0,1), message)
             end
             res = {:error => error, :aid => params[:aid]}
             render :json => res.to_json

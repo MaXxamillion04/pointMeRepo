@@ -1,0 +1,2 @@
+module RpushHelper
+end
