@@ -111,7 +111,7 @@ class ApiArrowController < ApplicationController
             end
             sql = "update arrow set accepted=true where aid='" + params[:aid] + "' returning true;"
             result = ActiveRecord::Base.connection.execute(sql)
-            sql = "select full_name,device_token from member where mid='" + params[:sender_mid] + "';"
+            sql = "select device_token from member where mid='" + params[:sender_mid] + "';"
             user = ActiveRecord::Base.connection.execute(sql)
             if(params[:format] != "json")
                 Rails.logger.error {"***UnknownFormat Exception was caught***"}
@@ -124,8 +124,8 @@ class ApiArrowController < ApplicationController
             error = 11 # rails server error
         ensure
             if(error == 0)
-                message = user.getvalue(0,0) + " accepted your arrow!"
-                notify(user.getvalue(0,1), message)
+                message = params[:receiver_name] + " accepted your arrow!"
+                notify(user.getvalue(0,0), message)
             end
             res = {:error => error, :aid => params[:aid]}
             render :json => res.to_json

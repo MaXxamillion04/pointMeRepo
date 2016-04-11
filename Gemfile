@@ -39,6 +39,7 @@ gem 'pg'
 gem 'twilio-ruby'
 gem 'rpush'
 gem 'gcm'
+gem 'apns'
 
 
 group :development, :test do
