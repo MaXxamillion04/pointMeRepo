@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
     puts response[:status]
     puts ""
     puts response[:body] 
+    
     # for ios
     # APNS.pem  = 'File.join(Rails.root, 'archer_dev_push_certificate.pem')
     # APNS.send_notification(token, message)
