@@ -323,7 +323,7 @@ class ApiUserController < ApplicationController
     end
     
     def store_token
-        sql = "update member set device_token='" + params[:device_token] + "' where mid='" + params[:mid] + "';"
+        sql = "update member set device_token='" + params[:device_token] + "',phone_type='" + params[:device_type] + "' where mid='" + params[:mid] + "';"
         token = ActiveRecord::Base.connection.execute(sql)
         res = {:error => 0}
         render :json => res.to_json
