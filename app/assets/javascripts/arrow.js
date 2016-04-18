@@ -401,7 +401,8 @@ function initMap(){
     
      friendMarker = new google.maps.Marker({
         map: map,
-        position: {lat: parseFloat(friendLat), lng: parseFloat(friendLon)}
+        position: {lat: parseFloat(friendLat), lng: parseFloat(friendLon)},
+        icon: '/images/map_pin.png'
     });
     
      myMarker = new google.maps.Marker({
