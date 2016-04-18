@@ -25,6 +25,9 @@ class ApplicationController < ActionController::Base
       puts response[:status]
       puts ""
       puts response[:body]
+      puts ""
+      puts token
+      puts phone_type
     end
   end
   
