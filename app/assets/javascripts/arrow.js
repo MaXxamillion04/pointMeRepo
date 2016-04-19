@@ -423,9 +423,9 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
         {"Device Type": "Web"}
     );
     $.ajax({
-        url: "/api/arrow/accept.json?k=" + k ,
+        url: "/api/arrow/accept.json" ,
         type: 'POST',
-        data: {aid: aid, sender_mid: sender_mid},
+        data: {aid: aid, sender_mid: sender_mid, k: k},
         success: function(result) {
             var num = div_num;
             div_num = '#' + div_num;
@@ -459,9 +459,9 @@ function deny(div_num, aid, sender_mid){
         {"Device Type": "Web"}
     );
     $.ajax({
-        url: "/api/arrow/deny.json?k=" + k,
-        type: 'GET',
-        data: {aid: aid, sender_mid: sender_mid},
+        url: "/api/arrow/deny.json",
+        type: 'POST',
+        data: {aid: aid, sender_mid: sender_mid, k: k},
         success: function(result) {
             div_num = '#' + div_num;
             $(div_num + '-outer').remove();
