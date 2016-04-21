@@ -46,11 +46,13 @@
                                                                                                     "' + req["aid"] + '", 
                                                                                                     "' + req["sender_mid"] + '",
                                                                                                     "' + req["sender_name"] + '",
+                                                                                                    "' + req["receiver_name"] + '",
                                                                                                     "' + req["deathtime"] +'")') %>
                             
                             <%= image_tag('deny_smaller.png', :class => 'col-xs-offset-1', :id => count.to_s + '-deny', :onclick => 'deny("' + count.to_s + '", 
                                                                                                     "' + req["aid"] + '",
-                                                                                                    "' + req["sender_mid"] + '")') %>
+                                                                                                    "' + req["sender_mid"] + '",
+                                                                                                    "' + req["receiver_name"] + '")') %>
                         </div>
                     </div>
                 </div>

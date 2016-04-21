@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   # welcome routes
   root 'welcome#index'
   get 'welcome/index'
+  get '/download' => 'welcome#download'
 
   # arrow routes
   resources :arrow, :only => ["index", "show"]

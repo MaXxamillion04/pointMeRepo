@@ -314,7 +314,7 @@ function determineDevice(){
 
         // this is something very odd
         browser = "Unknown";
-        os = "Unknown";
+        os = "Desktop";
     }
 }
 
@@ -417,7 +417,7 @@ function initMap(){
     }, 1000);
 }
 
-function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
+function approve(div_num, mid, aid, sender_mid, sender_name, receiver_name, deathtime){
     mixpanel.track(
         "ACCEPT",
         {"Device Type": "Web"}
@@ -425,7 +425,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     $.ajax({
         url: "/api/arrow/accept.json" ,
         type: 'POST',
-        data: {aid: aid, sender_mid: sender_mid, k: k},
+        data: {aid: aid, sender_mid: sender_mid, receiver_name: receiver_name, k: k},
         success: function(result) {
             var num = div_num;
             div_num = '#' + div_num;
@@ -453,7 +453,7 @@ function approve(div_num, mid, aid, sender_mid, sender_name, deathtime){
     
 }
 
-function deny(div_num, aid, sender_mid){
+function deny(div_num, aid, sender_mid, receiver_name){
     mixpanel.track(
         "DENY",
         {"Device Type": "Web"}
@@ -461,7 +461,7 @@ function deny(div_num, aid, sender_mid){
     $.ajax({
         url: "/api/arrow/deny.json",
         type: 'POST',
-        data: {aid: aid, sender_mid: sender_mid, k: k},
+        data: {aid: aid, sender_mid: sender_mid, receiver_name: receiver_name, k: k},
         success: function(result) {
             div_num = '#' + div_num;
             $(div_num + '-outer').remove();

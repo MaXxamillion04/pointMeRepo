@@ -1,7 +1,7 @@
 class ArrowController < ApplicationController
   def index
     @reciever_mid = params[:id]
-    sql = "select full_name, mid, location, aid, deathtime, accepted from arrow inner join member on ( member.mid = any( memberids::text[]) ) where mid != '" + @reciever_mid + "' and memberids @> '{" + @reciever_mid + "}'::text[] order by deathtime desc;"
+    sql = "select full_name, mid, location, aid, deathtime, accepted, receiver_name from arrow inner join member on ( member.mid = any( memberids::text[]) ) where mid != '" + @reciever_mid + "' and memberids @> '{" + @reciever_mid + "}'::text[] order by deathtime desc;"
     result = ActiveRecord::Base.connection.execute(sql)
     sql = "select place.pid, place.name, place.location, place.deathtime from place inner join member on ( place.location <@> member.location < 3 ) where member.mid='" + @reciever_mid + "' and place.sponsored=true;"
     places = ActiveRecord::Base.connection.execute(sql)
@@ -29,7 +29,7 @@ class ArrowController < ApplicationController
         delete = ActiveRecord::Base.connection.execute(sql)
       else
         hours_left = hours_left.to_s + " hours"
-        req = {"aid" => temp["aid"], "sender_mid" => sender_mid, "sender_name" => sender_name, "hours_left" => hours_left, "deathtime" => deathtime}
+        req = {"aid" => temp["aid"], "sender_mid" => sender_mid, "sender_name" => sender_name, "hours_left" => hours_left, "deathtime" => deathtime, "receiver_name" => temp["receiver_name"]}
         if (temp["accepted"] == nil)
           @new_requests << req
         elsif(temp["accepted"] == "t")
