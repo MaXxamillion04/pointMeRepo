@@ -3,7 +3,7 @@
 
 <script>
     $(document).ready(function(){
-        initWelcome('<%= Rails.application.secrets.google_scripts_clientID %>', '<%= Rails.application.secrets.google_scriptID %>');
+        initWelcome();
     });
 </script>
 <script src="https://apis.google.com/js/client.js">
@@ -51,12 +51,8 @@
                     <h1>Follow your arrow</h1>
                     <hr>
                     <p>Archer is the easiest way to find someone (or something) you know is nearby. Whether you're looking for a friend at the park, or a store at the mall, we'll lead you there.</p>
-                    <div id='singup'>
-                        <p>
-                            Be the first to try the app:<br><br>
-                            <a target="_blank"href='https://docs.google.com/forms/d/1Q4SHxFODrPuBv5NFiiC71sf83tEqEUgTVBBgbR1NPiM/viewform' class='btn btn-primary btn-lg'>Sign Up</a>
-                        </p>
-                    </div>
+                    <a href='http://bit.ly/1UcIGoW' target='_blank' style='margin-right: 3%;'><%= inline_svg("ios.svg", size: '200px * 80px') %></a>
+                    <a href='http://bit.ly/231S8Me' target='_blank' style='margin-left: 3%;'><%= inline_svg("android.svg", size: '200px * 80px') %></a>
                     </div>
                 </div>
             </div>
@@ -113,7 +109,7 @@
             <div class="container text-center">
                 <div class="call-to-action">
                     <h2>Download our mobile app on iOS or Android!</h2>
-                    <a id='download' target="_blank" href='https://docs.google.com/forms/d/1Q4SHxFODrPuBv5NFiiC71sf83tEqEUgTVBBgbR1NPiM/viewform' class="btn btn-default btn-xl wow tada">Sign Up</a>
+                    <a id='download' target="_blank" class="btn btn-default btn-xl wow tada">Download</a>
                 </div>
             </div>
         </aside>

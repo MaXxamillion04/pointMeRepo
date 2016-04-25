@@ -45,9 +45,10 @@ function initIndex(id, s, num_new, num_running, sponsored){
     largest_div = parseInt(num_new) + parseInt(num_running) + parseInt(sponsored) - 1;
     myID = id;
     location_count = 0;
-    var download_url = "/";
-    if(os == "iOS"){ download_url = "http://www.archerapp.com"; }
-    else if(os == "Android"){ download_url = "http://www.archerapp.com";}
+    var download_url = "";
+    if(os == "iOS"){ download_url = "http://bit.ly/1UcIGoW"; }
+    else if(os == "Android"){ download_url = "http://bit.ly/231S8Me";}
+    else { download_url = "http://www.archerapp.com" }
     $('#download').attr('href', download_url);
     
     localTimer = window.setInterval(function(){
@@ -651,6 +652,8 @@ var CLIENT_ID;
 var scriptId;
 
 function initWelcome(client_id, script_id){
-    //determineDevice();
-    
+    determineDevice();
+    if(os == 'iOS'){ $('#download').attr('href', 'http://bit.ly/1UcIGoW'); }
+    else if(os == 'android'){ $('#download').attr('href', 'http://bit.ly/1UcIGoW'); }
+    else { $('#download').attr('href', '/'); }
 }

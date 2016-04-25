@@ -39,6 +39,7 @@ gem 'pg'
 gem 'twilio-ruby'
 gem 'gcm'
 gem 'houston'
+gem 'inline_svg'
 
 
 group :development, :test do
