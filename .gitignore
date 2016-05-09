@@ -20,3 +20,13 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+#ignore secrets
+secrets.yml
+database.yml
+
+#ignore certificates
+archer_dev_push_certificate.p12
+archer_dev_push_certificate.pem
+archer_prod_push_certificate.p12
+archer_prod_push_certificate.pem

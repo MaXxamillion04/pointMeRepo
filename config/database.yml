@@ -7,21 +7,21 @@
 default: &default
   adapter: postgresql
   pool: 5
-  host: pointme.cf3l4krkpkua.us-west-2.rds.amazonaws.com
+  host: archer.crtbk52tysvn.us-west-2.rds.amazonaws.com
   database: pointme
   port: 5432
   username: pointmeteam
-  password: ee364e2015
+  password: <%= ENV["DBP"] %>
 
 development:
   <<: *default
   adapter: postgresql
   pool: 5
-  host: pointme.cf3l4krkpkua.us-west-2.rds.amazonaws.com
+  host: archer.crtbk52tysvn.us-west-2.rds.amazonaws.com
   database: pointme
   port: 5432
   username: pointmeteam
-  password: ee364e2015
+  password: <%= ENV["DBP"] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -30,18 +30,18 @@ test:
   <<: *default
   adapter: postgresql
   pool: 5
-  host: pointme.cf3l4krkpkua.us-west-2.rds.amazonaws.com
+  host: archer.crtbk52tysvn.us-west-2.rds.amazonaws.com
   database: pointme
   port: 5432
   username: pointmeteam
-  password: ee364e2015
+  password: <%= ENV["DBP"] %>
 
 production:
   <<: *default
   adapter: postgresql
   pool: 5
-  host: pointme.cf3l4krkpkua.us-west-2.rds.amazonaws.com
+  host: archer.crtbk52tysvn.us-west-2.rds.amazonaws.com
   database: pointme
   port: 5432
   username: pointmeteam
-  password: ee364e2015
+  password: <%= ENV["DBP"] %>
