@@ -22,8 +22,8 @@
 !.elasticbeanstalk/*.global.yml
 
 #ignore local ymls
-/config/locales/*.yml
-/config/locales/*.yml
+/config/*.yml
+/config/*.yml
 
 
 #ignore certificates
