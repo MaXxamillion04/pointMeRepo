@@ -21,12 +21,10 @@
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-#ignore secrets
-/config/locales/secrets.yml
-/config/locales/database.yml
+#ignore local ymls
+/config/locales/*.yml
+/config/locales/*.yml
 
 #ignore certificates
-/archer_dev_push_certificate.p12
-/archer_dev_push_certificate.pem
-/archer_prod_push_certificate.p12
-/archer_prod_push_certificate.pem
+/*.p12
+/*.pem
