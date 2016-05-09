@@ -25,6 +25,7 @@
 /config/locales/*.yml
 /config/locales/*.yml
 
+
 #ignore certificates
 /*.p12
 /*.pem
