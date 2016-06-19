@@ -1,0 +1,11 @@
+branch-defaults:
+  master:
+    environment: pointme-env
+    group_suffix: null
+global:
+  application_name: PointMeApp
+  default_ec2_keyname: null
+  default_platform: Ruby 2.2 (Puma)
+  default_region: us-west-2
+  profile: eb-cli
+  sc: git

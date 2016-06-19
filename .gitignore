@@ -17,15 +17,15 @@
 /tmp
 
 # Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+#.elasticbeanstalk/*
+#!.elasticbeanstalk/*.cfg.yml
+#!.elasticbeanstalk/*.global.yml
 
 #ignore local ymls
-/config/*.yml
-/config/*.yml
+#/config/*.yml
+#/config/*.yml
 
 
 #ignore certificates
-/*.p12
-/*.pem
+#/*.p12
+#/*.pem
